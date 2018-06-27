@@ -1,6 +1,0 @@
-development:
-  clients:
-    default:
-      database: micro_learning
-      hosts:
-        - localhost:27017
