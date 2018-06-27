@@ -1,0 +1,4 @@
+DATABASE_NAME=test
+DATABASE_USER=host
+DATABASE_PASSWORD=pass
+DATABASE_URL=postgres://localhost/mydb
