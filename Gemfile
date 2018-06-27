@@ -10,6 +10,7 @@ gem 'pg', '~> 0.20.0'
 gem  'rspec'
 gem 'rack-test'
 gem 'rspec_junit_formatter'
+gem 'dotenv'
 
 group :development do
   gem 'shotgun'
