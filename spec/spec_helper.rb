@@ -17,7 +17,7 @@ require 'rspec'
 
 ENV['RACK_ENV'] = 'test'
 
-require File.expand_path '../../app/lib/game.rb', __FILE__
+require File.expand_path '../../app/controllers/game.rb', __FILE__
 
 module RSpecMixin
   include Rack::Test::Methods
