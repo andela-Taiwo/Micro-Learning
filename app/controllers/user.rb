@@ -13,7 +13,7 @@ module  Sinatra
         app.post '/auth/unauthenticated' do
           session[:return_to] = env['warden.options'][:attempted_path]
           puts env['warden.options'][:attempted_path]
-          flash[:error] = env['warden'].message  || 'You must to login to continue'
+          flash[:error] = env['warden'].message  || 'You must to login to continue.'
           redirect '/login'
         end
 
@@ -25,9 +25,7 @@ module  Sinatra
 
         app.post "/unauthenticated" do
           session[:return_to] = env['warden.options'][:attempted_path] if session[:return_to].nil?
-
-          # Set the error and use a fallback if the message is not defined
-          flash[:error] = env['warden.options'][:message] || "You must log in"
+          flash[:error] = env['warden.options'][:message] || 'You must to login to continue'
           redirect 'login'
         end
 
@@ -36,12 +34,12 @@ module  Sinatra
           erb :login
         end
         app.post '/login' do
-          user =  warden_handler.authenticate!
+          user = warden_handler.authenticate!
           if user
             redirect '/dashboard', flash[:success] = 'Successfully logged in'
           else
-            flash.now.alert = env['warden'].message
-            redirect '/login'
+            redirect '/login', flash.now.alert = env['warden'].message
+
           end
         end
 
@@ -50,6 +48,7 @@ module  Sinatra
           warden_handler.logout
           flash[:success] = 'Successfully logged out'
           redirect '/'
+
         end
 
         app.get '/admin' do
@@ -63,17 +62,16 @@ module  Sinatra
         end
 
         app.post '/signup' do
+          puts params[:user]
           @user = User.new(params[:user])
           @errors = {}
           if @user.save
             send_mail(@user['email'])
             flash[:success] = 'Please confirm your email address to continue'
-            erb :signup
+            redirect '/login'
           else
-            @errors =  @user.errors.to_json
+            @errors = @user.errors.to_json
             error = JSON.parse(@errors)
-            puts @errors
-            # flash[:error] = 'Ooooppss, something went wrong!'
             flash[:error] = error
             redirect '/signup'
           end

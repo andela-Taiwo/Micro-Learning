@@ -7,7 +7,6 @@ require 'warden'
 require_relative 'helpers/auth_helper'
 
 
-
 set :database_file, 'config/database.yml'
 ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'] || 'postgres://localhost/micro_learning')
 
@@ -41,6 +40,7 @@ class App < Sinatra::Base
   def authenticate!
     user = User.find_by_email(params['email'])
     if user && user.authenticate(params['password'])
+      puts 'I got here'
       success! user
     else
       fail "Invalid email or password"

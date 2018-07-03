@@ -1,4 +1,11 @@
 <h3><%= @title %></h3>
+<% flash.keys.each do |type| %>
+  <div class="alert alert-warning" role="alert">
+    <div data-alert class="flash <%= type %> alert-box radius">
+      <%= flash[type] %>
+    </div>
+  </div>
+<%end%>
 <form method="POST">
   <div class="form-group">
     <label for="exampleInputEmail1">Email address</label>
