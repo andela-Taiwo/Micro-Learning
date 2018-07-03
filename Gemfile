@@ -17,6 +17,7 @@ gem 'pony', '~> 1.6', '>= 1.6.1'
 gem 'sinatra-flash', '~> 0.3.0'
 
 group :development do
+  gem 'pry'
   gem 'shotgun'
 end
 

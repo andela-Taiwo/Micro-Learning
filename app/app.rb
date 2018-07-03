@@ -2,7 +2,7 @@ require 'sinatra'
 require 'dotenv/load'
 require 'sinatra/activerecord'
 require 'erb'
-require 'mail'
+require_relative 'helpers/mailer'
 
 enable :sessions
 set :database_file, 'config/database.yml'
@@ -15,8 +15,10 @@ class App < Sinatra::Base
   register Sinatra::Flash
   register Sinatra::App::Home
   register Sinatra::App::SignUp
+  helpers Sinatra::App::Mailer
 end
 
 
 # require_relative 'controllers/init'
+# require_relative 'helpers/mailer'
 require_relative 'models/init'

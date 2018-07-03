@@ -23,12 +23,27 @@
       </nav>
     </div>
   </header>
+
+  <%# flash.keys.each do |type| %>
+<!--    <div data-alert class="flash <%#= type %> alert-box radius">-->
+      <%#= flash[type] %>
+<!--      <a href="#" class="close">&times;</a>-->
+<!--    </div>-->
+  <%# end %>
+  <%# flash.each do |key, value| %>
+<!--    <div class="alert alert-<%#= key %>"><%#= value %></div>-->
+  <%# end %>
   <% flash.keys.each do |type| %>
+    <div class="alert alert-warning" role="alert">
     <div data-alert class="flash <%= type %> alert-box radius">
-      <%= flash[type] %>
-      <a href="#" class="close">&times;</a>
+      <%#= flash[type]%>
+      <%= flash[type].keys[0] %>    <%= flash[type].values[0].pop %>
+      <%#= key %>
+
     </div>
-  <% end %>
+    </div>
+      <%end%>
+
   <%= yield %>
   <footer class="mastfoot mt-auto text-centre">
     <div class="inner">
