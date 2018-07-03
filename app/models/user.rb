@@ -1,3 +1,4 @@
+
 class User < ActiveRecord::Base
   before_create :confirmation_token
   include ActiveModel::Validations
@@ -21,5 +22,4 @@ class User < ActiveRecord::Base
       self.confirm_token = SecureRandom.urlsafe_base64.to_s
     end
   end
-
 end
