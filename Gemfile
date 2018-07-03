@@ -15,6 +15,9 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'jwt'
 gem 'pony', '~> 1.6', '>= 1.6.1'
 gem 'sinatra-flash', '~> 0.3.0'
+gem "warden", "1.2.1"
+gem 'sinatra_warden'
+gem 'haml'
 
 group :development do
   gem 'pry'
