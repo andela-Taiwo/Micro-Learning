@@ -1,7 +1,11 @@
+require_relative 'topic'
+require_relative 'user_topic'
 
 class User < ActiveRecord::Base
-  before_create :confirmation_token
   include ActiveModel::Validations
+  has_many :user_topics
+  has_many :topics, through: :user_topics
+  before_create :confirmation_token
   has_secure_password
   # validates :password_digest, presence: true
   validates :password_confirmation, presence: true
@@ -23,3 +27,7 @@ class User < ActiveRecord::Base
     end
   end
 end
+
+
+
+
