@@ -8,6 +8,7 @@ require 'json'
 module  Sinatra
   module App
     module SignUp
+
       def self.registered(app)
 
         app.post '/auth/unauthenticated' do
