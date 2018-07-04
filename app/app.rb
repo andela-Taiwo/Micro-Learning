@@ -5,6 +5,7 @@ require 'erb'
 require_relative 'helpers/mailer'
 require 'warden'
 require_relative 'helpers/auth_helper'
+require_relative 'models/topic.rb'
 
 
 set :database_file, 'config/database.yml'
@@ -54,4 +55,5 @@ end
 
 # require_relative 'controllers/init'
 # require_relative 'helpers/mailer'
+
 require_relative 'models/init'
