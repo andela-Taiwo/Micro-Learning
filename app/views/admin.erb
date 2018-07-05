@@ -1,1 +1,57 @@
-<h1>Hello Admin</h1>
+<div class="container">
+  <div class="row">
+
+    <div class="col-xs-4" style="background: lightgrey ; width: 25%;  height: 100%" id="sticky-sidebar">
+      <div class="col-xs-12" id="sticky-sidebar">
+        <ul>
+          <li><h4>Manage</h4></li>
+          <li><a href="admin/topic">Topics</a></li>
+          <li><a href="admin/resource">Resources</a></li>
+          <li><a href="/admin/users">Users</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-xs-8" style="background: ghostwhite; width: 70%; height: 100%">
+
+        <div class="col-xs-12" id="main">
+          <div  class="row" >
+            <div class="card col-sm-4">
+              <!--    <img class="card-img-top" src="..." alt="Card image cap">-->
+              <div class="card-body">
+                <h5 class="card-title"><%= @topics.count %></h5>
+                <p class="card-text"> Total Topics Available</p>
+              </div>
+              <!--            <div class="card-footer">-->
+              <!--              <small class="text-muted"><%#topic.updated_at%></small>-->
+              <!--              <small class="text-muted">Add topic</small>-->
+              <!--            </div>-->
+            </div>
+            <div class="card col-sm-4">
+              <!--    <img class="card-img-top" src="..." alt="Card image cap">-->
+              <div class="card-body">
+                <h5 class="card-title"><%= @users.count %></h5>
+                <p class="card-text"> Total Topics Available</p>
+              </div>
+              <!--            <div class="card-footer">-->
+              <!--              <small class="text-muted"><%#topic.updated_at%></small>-->
+              <!--              <small class="text-muted">Add topic</small>-->
+              <!--            </div>-->
+            </div>
+            <div class="card col-sm-4">
+              <!--    <img class="card-img-top" src="..." alt="Card image cap">-->
+              <div class="card-body">
+                <h5 class="card-title"><%= @resources.count %></h5>
+                <p class="card-text"> Total Topics Available</p>
+              </div>
+              <!--            <div class="card-footer">-->
+              <!--              <small class="text-muted"><%#topic.updated_at%></small>-->
+              <!--              <small class="text-muted">Add topic</small>-->
+              <!--            </div>-->
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>

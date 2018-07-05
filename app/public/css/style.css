@@ -1,0 +1,16 @@
+
+#sticky-sidebar {
+  /*position:fixed;*/
+  /*width: 100%;*/
+    padding: 15px 20px;
+}
+
+
+#sticky-sidebar ul{
+    list-style: none; !important;
+    display: inline-block; !important;
+}
+.row{
+    margin-right: 0;
+    margin-left: 0;
+}

@@ -1,0 +1,16 @@
+<h3><%=@title %></h3>
+<div class="card-group">
+  <%  @topics.each do |topic|%>
+  <div class="card">
+<!--    <img class="card-img-top" src="..." alt="Card image cap">-->
+    <div class="card-body">
+      <h5 class="card-title"><%= topic.title %></h5>
+      <p class="card-text"> <%= topic.description%></p>
+    </div>
+    <div class="card-footer">
+      <small class="text-muted"><%=topic.updated_at%></small>
+      <small class="text-muted">Add topic</small>
+    </div>
+  </div>
+    <% end %>
+</div>
