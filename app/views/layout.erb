@@ -1,3 +1,4 @@
+
 <html>
 <head>
   <meta charset="utf-8">
@@ -7,6 +8,7 @@
   <meta name="micro learning app" content="">
   <meta name="Sokunbi Taiwo" content="">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="text-centre">
 <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
@@ -15,7 +17,7 @@
       <h3 class="masthead-brand">3L</h3>
       <nav class="nav nav-masthead justify-content-center">
         <a class="nav-link active" href="/">Home</a>
-        <a class="nav-link" href="#">Courses</a>
+        <a class="nav-link" href="/topics">Topics</a>
         <a class="nav-link" href="/signup">Signup</a>
         <a class="nav-link" href="login">Login</a>
         <a class="nav-link" href="/logout">Logout</a>
@@ -23,6 +25,21 @@
       </nav>
     </div>
   </header>
+
+  <% flash.keys.each do |type| %>
+    <% if type %>
+      <div class="alert alert-warning" role="alert">
+        <%if flash[type].is_a? Hash %>
+          <%= flash[type].keys[0] %>    <%= flash[type].values[0].pop %>
+
+        <% else %>
+          <div data-alert class="flash <%= type %> alert-box radius">
+            <%= flash[type] %>
+          </div>
+        <% end %>
+    <% end %>
+    </div>
+  <%end%>
 
   <%= yield %>
   <footer class="mastfoot mt-auto text-centre">

@@ -19,7 +19,9 @@ class User < ActiveRecord::Base
       message: "only allows a-z, 0-9 and !@#$%^&*()"
   },  length: { minimum: 6, maximum: 35 }
 
-
+  # def current_admin
+  #   current_user && current_user.admin
+  # end
   private
   def confirmation_token
     if self.confirm_token.blank?
