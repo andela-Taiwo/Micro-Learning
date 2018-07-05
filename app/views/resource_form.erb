@@ -1,0 +1,63 @@
+<h1><%= @title %></h1>
+
+<form method="post" action="">
+  <div class="form-group sm">
+    <label for="exampleFormControlInput1">Title</label>
+    <input type="text" class="form-control" id="topicTitle" placeholder="Title" name="resource[title]">
+  </div>
+
+  <div class="form-group sm">
+    <label for="exampleFormControlInput1">Url</label>
+    <input type="text" class="form-control" id="topicTitle" placeholder="Title" name="resource[url]">
+  </div>
+
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1">Description</label>
+    <textarea class="form-control" id="topicDescription" rows="3" name="resource[description]"></textarea>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Add Resource</button>
+</form>
+
+<%if @resources %>
+  <table class="table  table-hover">
+    <thead>
+    <tr>
+      <th scope="col">Id </th>
+      <th scope="col">Title</th>
+      <th scope="col">Url</th>
+      <th scope="col">Last Updated</th>
+      <th scope="col">Actions</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @resources.each do |resource| %>
+      <tr>
+        <th scope="row"><%= resource.id%></th>
+        <td><%=resource.title%></td>
+        <td><%=resource.url%></td>
+        <td><%=resource.updated_at%></td>
+        <td>
+          <form method="get" action="/admin/resource/<%=resource.id %>">
+            <!--        <input id="hidden" type="hidden" name="_method" value="GET">-->
+            <input type="submit" value="Edit" class="btn btn-outline-info btn-sm">
+          </form>
+          <!--      <button class="btn btn-outline-info btn-sm">Edit</button>-->
+        </td>
+
+        <td>
+          <form method="post" action="/admin/resource/<%=resource.id %>/delete">
+            <input id="hidden" type="hidden" name="_method" value="DELETE">
+            <input type="submit" value="Delete" class="btn btn-outline-danger btn-sm">
+          </form>
+        </td>
+
+      </tr>
+    <%end%>
+    </tbody>
+  </table>
+<% end%>
+
+
+

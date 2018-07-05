@@ -45,13 +45,11 @@ module Sinatra
         end
         app.patch '/admin/topic/:id/edit' do
           check_admin_authentication
-          puts params
           @topic = Topic.find_by_id(params[:id])
           if @topic
             erb :edit_topic_form
             @topic.title = params[:title] if params.has_key?('title')
             @topic.description = params[:description] if params.has_key?('description')
-            puts ">>>>>>>>>>>>>>>>>>#{@topic.title}"
             if @topic.save
               flash[:success] = 'Successfully updated the topic'
               redirect '/admin/topic'

@@ -1,0 +1,21 @@
+<% if @resource %>
+  <form method="post" action="/admin/resource/<%=@resource.id %>/edit" class="sm">
+    <div class="form-group sm">
+      <label for="exampleFormControlInput1">Title</label>
+      <input type="text" class="form-control" id="topicTitle" placeholder="Title" name="title" value="<%= @resource.title %>">
+    </div>
+    <div class="form-group sm">
+      <label for="exampleFormControlInput1">url</label>
+      <input type="text" class="form-control" id="topicTitle" placeholder="Title" name="title" value="<%= @resource.url %>">
+    </div>
+
+    <div class="form-group">
+      <label for="exampleFormControlTextarea1">Description</label>
+      <textarea class="form-control" id="topicDescription" rows="3" name="description" ><%= @resource.description  %></textarea>
+    </div>
+    <input id="hidden" type="hidden" name="_method" value="PATCH">
+    <!--  <button type="button" class="btn btn-primary ">Edit</button>-->
+    <input type="submit" value="Edit" class="btn btn-primary">
+  </form>
+
+<% end%>
