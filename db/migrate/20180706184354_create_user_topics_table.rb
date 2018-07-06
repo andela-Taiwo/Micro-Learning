@@ -1,5 +1,4 @@
-class CreateUserTopics < ActiveRecord::Migration
-
+class CreateUserTopicsTable < ActiveRecord::Migration
   def change
     create_table :user_topics do |t|
       t.integer :user_id
@@ -8,5 +7,4 @@ class CreateUserTopics < ActiveRecord::Migration
       t.timestamps :updated_at
     end
   end
-
 end

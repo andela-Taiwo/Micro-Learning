@@ -1,7 +1,6 @@
 require 'erb'
 require 'sinatra/flash'
 require 'pony'
-require 'pry'
 require 'json'
 
 module Sinatra

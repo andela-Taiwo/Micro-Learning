@@ -17,11 +17,20 @@
       <h3 class="masthead-brand">3L</h3>
       <nav class="nav nav-masthead justify-content-center">
         <a class="nav-link active" href="/">Home</a>
+        <% if admin_logged_in?  %>
+        <a class="nav-link" href="/admin">Admin Dashboard</a>
         <a class="nav-link" href="/topics">Topics</a>
-        <a class="nav-link" href="/signup">Signup</a>
-        <a class="nav-link" href="login">Login</a>
         <a class="nav-link" href="/logout">Logout</a>
-        <a class="nav-link" href="#">Contact</a>
+
+        <% elsif logged_in? %>
+          <a class="nav-link" href="/topics">Topics</a>
+          <a class="nav-link" href="/dashboard">Dashboard</a>
+          <a class="nav-link" href="/logout">Logout</a>
+
+          <% else %>
+          <a class="nav-link" href="/signup">Signup</a>
+          <a class="nav-link" href="login">Login</a>
+          <% end %>
       </nav>
     </div>
   </header>
