@@ -7,7 +7,6 @@ class User < ActiveRecord::Base
   has_many :topics, through: :user_topics
   before_create :confirmation_token
   has_secure_password
-  # validates :password_digest, presence: true
   validates :password_confirmation, presence: true
   validates :email, presence: true
   validates :username, length: {
@@ -19,9 +18,6 @@ class User < ActiveRecord::Base
       message: "only allows a-z, 0-9 and !@#$%^&*()"
   },  length: { minimum: 6, maximum: 35 }
 
-  # def current_admin
-  #   current_user && current_user.admin
-  # end
   private
   def confirmation_token
     if self.confirm_token.blank?

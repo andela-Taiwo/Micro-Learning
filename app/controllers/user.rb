@@ -1,7 +1,6 @@
 require 'erb'
 require 'sinatra/flash'
 require 'pony'
-require 'pry'
 require 'json'
 
 module  Sinatra
@@ -19,7 +18,7 @@ module  Sinatra
         app.post "/unauthenticated" do
           session[:return_to] = env['warden.options'][:attempted_path] if session[:return_to].nil?
           puts env['warden.options'][:attempted_path]
-          flash[:error] = env['warden.options'][:message] || 'You must to login to continue'
+          flash[:error] = env['warden.options'][:message] || 'Invalid email or password.'
           redirect 'login'
         end
 
@@ -53,10 +52,10 @@ module  Sinatra
            erb :admin
         end
 
-        app.get '/dashboard' do
-          check_authentication
-          erb :dashboard
-        end
+        # app.get '/dashboard' do
+        #   check_authentication
+        #   erb :dashboard
+        # end
 
         app.post '/signup' do
           @user = User.new(params[:user])

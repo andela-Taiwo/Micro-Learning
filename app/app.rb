@@ -7,7 +7,6 @@ require 'warden'
 require_relative 'helpers/auth_helper'
 require 'sinatra/assetpack'
 require 'sass'
-# require 'sprockets'
 
 
 
@@ -17,11 +16,8 @@ ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'] || 'postgres://local
 Dir[File.join(File.dirname(__FILE__), 'controllers', '*.rb')].each { |lib| require_relative lib }
 
 class App < Sinatra::Base
-  # set :public_folder, 'public'
   enable :static
   use Rack::Session::Cookie, :secret => ENV['SESSION_SECRET']
-  # enable :sessions
-  # set :session_secret, ENV['SESSION_SECRET']
   register Sinatra::AssetPack
   register Sinatra::Flash
   helpers Sinatra::App::Helpers
@@ -29,6 +25,7 @@ class App < Sinatra::Base
   register Sinatra::App::SignUp
   register Sinatra::App::TopicController
   register Sinatra::App::ResourceController
+  register Sinatra::App::UserTopicController
   helpers Sinatra::App::Mailer
 
 
@@ -60,15 +57,13 @@ end
 
   Warden::Strategies.add(:admin) do
     def valid?
-      puts 'in admin valid method'
       params['email'] || params['password']
     end
 
     def authenticate!
       user = User.find_by_email(params['email'])
-      if user.admin
+      if user && user.admin
         success! user
-        puts 'in admin auth method'
       else
         fail "Invalid email or password"
       end
@@ -85,9 +80,5 @@ end
 
 end
 
-
-
-# require_relative 'controllers/init'
-# require_relative 'helpers/mailer'
 
 require_relative 'models/init'

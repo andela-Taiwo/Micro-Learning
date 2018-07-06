@@ -2,7 +2,8 @@
 module Sinatra
   module App
     module Helpers
-      # private
+
+      private
 
       def warden_handler
         env['warden']
@@ -17,8 +18,6 @@ module Sinatra
 
       def check_admin_authentication
         check_authentication
-        # throw(:warden, error: 'unauthenticated') unless env['warden'].authenticated?(:admin)
-        # present :current_user, env['warden'].user
         unless current_user.admin
           redirect '/login'
         end
@@ -27,6 +26,14 @@ module Sinatra
       def current_user
         @current_user = warden_handler.user
         @current_user ||= User.find_by_id(session[:user_id])
+      end
+
+      def logged_in?
+        !current_user.nil?
+      end
+
+      def admin_logged_in?
+        true if logged_in? && current_user.admin == true
       end
 
     end

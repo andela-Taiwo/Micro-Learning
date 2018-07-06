@@ -9,7 +9,9 @@
     </div>
     <div class="card-footer">
       <small class="text-muted"><%=topic.updated_at%></small>
-      <small class="text-muted">Add topic</small>
+      <form method="post" action="/user/topics/<%=topic.id %>">
+        <input type="submit" value="Select Topic" class="btn btn-outline-danger btn-sm">
+      </form>
     </div>
   </div>
     <% end %>
