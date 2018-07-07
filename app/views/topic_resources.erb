@@ -1,0 +1,61 @@
+<h1><%= @title %></h1>
+  <% if @topic && @resources %>
+<form method="post" action="">
+  <% @resources.each do |resource| %>
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <div class="input-group-text">
+      <input type="checkbox" aria-label="Checkbox for following text input" name="topic[resource_ids][]" value="<%=resource.id%>" id="<%=resource.id%>">
+    </div>
+  </div>
+   <label  class="form-control"><span><%= resource.title  %></span></label>
+  <% end %>
+</div>
+  <button type="submit" class="btn btn-primary">Add Resources</button> 
+  
+
+</form>
+
+  <%end%>
+
+<%if @topic_resources %>
+  <table class="table  table-hover">
+    <thead>
+    <tr>
+      <th scope="col">Id </th>
+      <th scope="col">Title</th>
+       <th scope="col">Url</th>
+      <th scope="col">Description</th>
+      <th scope="col">Last Updated</th>
+      <th scope="col">Actions</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @topic_resources.each do |resource| %>
+      <tr>
+        <th scope="row"><%= resource.id%></th>
+        <td><%=resource.title%></td>
+        <td><%=resource.url%></td>
+        <td><%=resource.description%></td>
+        <td><%=resource.updated_at%></td>
+        <td>
+          <form method="get" action="/admin/topic/<%=@topic.id %>/resource/<%=resource.id %> ">
+            <input type="submit" value="View" class="btn btn-outline-info btn-sm">
+          </form>
+        </td>
+
+        <td>
+          <form method="post" action="/admin/topic/<%=@topic.id %>/resource/<%=resource.id %>/delete">
+            <input id="hidden" type="hidden" name="_method" value="DELETE">
+            <input type="submit" value="Delete" class="btn btn-outline-danger btn-sm">
+          </form>
+        </td>
+
+      </tr>
+    <%end%>
+    </tbody>
+  </table>
+  <%else%>
+    <h3> No resource yet for the topic</h3>
+<% end%>

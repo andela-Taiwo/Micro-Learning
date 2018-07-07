@@ -26,6 +26,7 @@ class App < Sinatra::Base
   register Sinatra::App::TopicController
   register Sinatra::App::ResourceController
   register Sinatra::App::UserTopicController
+  register Sinatra::App::TopicResourceController
   helpers Sinatra::App::Mailer
 
 

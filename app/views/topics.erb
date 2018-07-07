@@ -1,18 +1,40 @@
-<h3><%=@title %></h3>
-<div class="card-group">
-  <%  @topics.each do |topic|%>
-  <div class="card">
-<!--    <img class="card-img-top" src="..." alt="Card image cap">-->
-    <div class="card-body">
-      <h5 class="card-title"><%= topic.title %></h5>
-      <p class="card-text"> <%= topic.description%></p>
-    </div>
-    <div class="card-footer">
-      <small class="text-muted"><%=topic.updated_at%></small>
-      <form method="post" action="/user/topics/<%=topic.id %>">
-        <input type="submit" value="Select Topic" class="btn btn-outline-danger btn-sm">
-      </form>
-    </div>
+
+<div class="container">
+  <h3><%=@title %></h3>
+  <div class="row">
+
+    <h4><%= @title %></h4>
   </div>
+  <hr>
+
+  <div class="row row-margin-bottom">
+    <%  @topics.each do |topic|%>
+    <div class="col-md-5 no-padding lib-item" data-category="view">
+      <div class="lib-panel">
+        <div class="row box-shadow">
+          <div class="col-md-6">
+            <img class="lib-img-show" src="http://lorempixel.com/850/850/?random=123">
+          </div>
+          <div class="col-md-6">
+            <div class="lib-row lib-header">
+              <%= topic.title %>
+              <div class="lib-header-seperator"></div>
+            </div>
+            <div class="lib-row lib-desc">
+              <%= topic.description %>
+              <div class="row">
+                <%= topic.updated_at %>
+                <form method="post" action="/user/topics/<%=topic.id %>">
+                  <input type="submit" value="Select Topic" class="btn btn-outline-danger btn-sm">
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      <div class="col-md-1"></div>
     <% end %>
+  </div>
+
 </div>
