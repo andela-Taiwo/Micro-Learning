@@ -35,6 +35,7 @@ module Sinatra
             @title = 'Topic'
             erb :topic_form
         end
+
         app.get '/admin/topic/:id' do
         check_admin_authentication
         @topic = Topic.find_by_id(params[:id])

@@ -39,6 +39,10 @@
     </td>
 
     <td>
+      <form method="get" action="/admin/topic/<%=topic.id%>/resources">
+<!--        <input id="hidden" type="hidden" name="_method" value="DELETE">-->
+        <input type="submit" value="Resource" class="btn btn-outline-danger btn-sm">
+      </form>
     <form method="post" action="/admin/topic/<%=topic.id %>/delete">
         <input id="hidden" type="hidden" name="_method" value="DELETE">
         <input type="submit" value="Delete" class="btn btn-outline-danger btn-sm">

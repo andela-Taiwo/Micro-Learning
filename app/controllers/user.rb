@@ -52,10 +52,6 @@ module  Sinatra
            erb :admin
         end
 
-        # app.get '/dashboard' do
-        #   check_authentication
-        #   erb :dashboard
-        # end
 
         app.post '/signup' do
           @user = User.new(params[:user])
