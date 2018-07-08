@@ -1,10 +1,8 @@
+<% if @resources %>
 <div class="container">
-  <div class="row">
-
-    <h4><%= @resource.title %></h4>
-  </div>
   <hr>
   <div class="row row-margin-bottom">
+    <% @resources.each do |resource| %>
     <div class="col-md-5 no-padding lib-item" data-category="view">
       <div class="lib-panel">
         <div class="row box-shadow">
@@ -13,16 +11,23 @@
           </div>
           <div class="col-md-6">
             <div class="lib-row lib-header">
-              <%= @resource.title %>
+              <%= resource.title %>
               <div class="lib-header-seperator"></div>
             </div>
             <div class="lib-row lib-desc">
-              <%= @resource.description %>
+              <%= resource.description %>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-md-1"></div>
+      <div class="col-md-1"></div>
+  <% end %>
+
+
   </div>
+
 </div>
+<% else %>
+  <h3>No resource found for this topic</h3>
+<% end %>
