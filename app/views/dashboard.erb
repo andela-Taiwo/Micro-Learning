@@ -22,14 +22,12 @@
         <td><%=topic.updated_at%></td>
         <td>
           <form method="get" action="/topic/<%=topic.id %>">
-            <!--        <input id="hidden" type="hidden" name="_method" value="GET">-->
             <input type="submit" value="View" class="btn btn-outline-info btn-sm">
           </form>
         </td>
         <td>
-          <form method="get" action="/topic/<%=topic.id %>/resources">
-<!--            <input id="hidden" type="hidden" name="_method" value="DELETE">-->
-            <input type="submit" value="Resources" class="btn btn-outline-danger btn-sm">
+          <form method="get" action="user/topics/<%=topic.id %>/resources">
+            <input type="submit" value="Resources" class="btn btn-outline-primary btn-sm">
           </form>
         </td>
         <td>

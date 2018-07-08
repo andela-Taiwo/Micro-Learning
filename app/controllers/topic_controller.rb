@@ -15,6 +15,14 @@ module Sinatra
           erb  :topics
         end
 
+        app.get '/user/topics/:id/resources' do
+          check_authentication
+          @topic = Topic.find(params[:id])
+          @resources = @topic.resources
+          @resources =  @resources.sample(1)
+          erb  :user_topic_resources
+        end
+
         app.post '/admin/topic' do
           check_admin_authentication
           @topic = Topic.new(params[:topic])
