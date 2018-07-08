@@ -9,7 +9,7 @@ module Sinatra
 
       def self.registered(app)
         app.get '/admin/topic/:id/resources' do
-          check_admin_authentication
+          check_authentication
           @resources = Resource.all
           @topic = Topic.find_by(id: params[:id])
           @topic_resources = @topic.resources
@@ -52,7 +52,7 @@ module Sinatra
           resource_id = params[:topic][:resource_ids]
           resources = Resource.find(resource_id)
           @topic = Topic.find_by(id: params[:id])
-          existing_resources = @topic.resources.find(resource_id)
+          existing_resources = @topic.resources.find_by(id: resource_id)
 
           if existing_resources
             flash[:error] = 'The resource already exist for the topic.'
