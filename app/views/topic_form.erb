@@ -33,15 +33,13 @@
     <td>
       <form method="get" action="/admin/topic/<%=topic.id %>">
 <!--        <input id="hidden" type="hidden" name="_method" value="GET">-->
-        <input type="submit" value="Edit" class="btn btn-outline-info btn-sm">
+        <input type="submit" value="Edit" class="btn btn-outline-primary btn-sm">
       </form>
-<!--      <button class="btn btn-outline-info btn-sm">Edit</button>-->
     </td>
 
     <td>
       <form method="get" action="/admin/topic/<%=topic.id%>/resources">
-<!--        <input id="hidden" type="hidden" name="_method" value="DELETE">-->
-        <input type="submit" value="Resource" class="btn btn-outline-danger btn-sm">
+        <input type="submit" value="Resource" class="btn btn-outline-info btn-sm">
       </form>
     <form method="post" action="/admin/topic/<%=topic.id %>/delete">
         <input id="hidden" type="hidden" name="_method" value="DELETE">

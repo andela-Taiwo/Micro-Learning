@@ -19,6 +19,7 @@ module Sinatra
           check_authentication
           @topic = Topic.find(params[:id])
           @resources = @topic.resources
+          @resources =  @resources.sample(1)
           erb  :user_topic_resources
         end
 
