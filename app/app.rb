@@ -5,7 +5,6 @@ require 'erb'
 require_relative 'helpers/mailer'
 require 'warden'
 require_relative 'helpers/auth_helper'
-# require_relative 'helpers/email_notification'
 require 'sinatra/assetpack'
 require 'sass'
 require 'sidekiq'
@@ -24,6 +23,10 @@ Dir[File.join(File.dirname(__FILE__), 'controllers', '*.rb')].each { |lib| requi
 Dir[File.join(File.dirname(__FILE__), 'workers', '*.rb')].each { |file| load file }
 
 
+Sidekiq.configure_client do |config|
+  config.redis = { :size => 1 }
+end
+
 class App < Sinatra::Base
   enable :static
   use Rack::Session::Cookie, :secret => ENV['SESSION_SECRET']
@@ -37,17 +40,6 @@ class App < Sinatra::Base
   register Sinatra::App::UserTopicController
   register Sinatra::App::TopicResourceController
   helpers Sinatra::App::Mailer
-
-
-  Sidekiq.configure_server do |config|
-    config.on(:startup) do
-      Sidekiq.schedule = YAML.load_file(File.expand_path('../config/sidekiq.yml', __FILE__))
-      # SidekiqScheduler::Scheduler.instance.reload_schedule!
-      Sidekiq::Scheduler.reload_schedule!
-      # Sidekiq::Scheduler.load_schedule!
-    end
-  end
-
 
   use Warden::Manager do |manager|
     manager.default_strategies :password
@@ -113,7 +105,7 @@ end
 
   get '/test/add_job' do
     "
-		<p>Added Job: #{ResourceNotification.perform_at(2.minutes)}</p>
+		<p>Added Job: #{ResourceNotification.set(:queue => :default).perform_async}</p>
 		<p><a href='/'>Back</a></p>
 		"
   end

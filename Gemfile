@@ -20,7 +20,9 @@ gem 'sidekiq'
 gem 'clockwork'
 gem 'sidekiq-scheduler'
 gem 'rufus-scheduler'
-# gem 'redis'
+gem 'redis'
+gem "foreman"
+
 
 group :development do
   gem 'shotgun'

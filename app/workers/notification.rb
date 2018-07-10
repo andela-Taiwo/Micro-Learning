@@ -1,26 +1,23 @@
 require 'sidekiq'
 require 'sidekiq-scheduler'
 
-
 Sidekiq.configure_server do |config|
   config.on(:startup) do
+    config.redis = { :size => 27 }
     Sidekiq.schedule = YAML.load_file(File.expand_path('../../config/sidekiq.yml', __FILE__))
-    # SidekiqScheduler::Scheduler.instance.reload_schedule!
-    Sidekiq::Scheduler.reload_schedule!
-
+    SidekiqScheduler::Scheduler.instance.reload_schedule!
   end
 end
 
 class ResourceNotification
   include Sidekiq::Worker
-  uri = ENV["REDISTOGO_URL"] || "redis://localhost:6379/"
-  $redis = Redis.new(:url => uri)
+  uri = URI.parse(ENV["REDISCLOUD_URL"] || "redis://localhost:6379/")
+  $redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
   def perform (msg = "send resource")
     users = User.all
     puts 'Load all users'
     users.each do |user|
       topics = user.topics
-      puts 'I got into the loop'
       topic = topics.sample(1)
       if topic[0]
         resources = topic[0].resources
@@ -51,4 +48,4 @@ class ResourceNotification
     }
     Pony.mail(:to => recipient)
   end
-  end
+end

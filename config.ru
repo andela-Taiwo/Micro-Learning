@@ -1,7 +1,7 @@
 require './app/app.rb'
 require './app/controllers/user.rb'
 # require 'sidekiq/web'
-# require 'sidekiq/web'
+require 'sidekiq/web'
 require 'sidekiq-scheduler/web'
 
 use Rack::MethodOverride

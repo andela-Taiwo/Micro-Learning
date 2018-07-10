@@ -1,5 +1,16 @@
  resource_notification:
-    every: 2m
-    queue: high
+    cron: '00 10 * * *'   # Runs once per 2 minute
+#    every: 2h
+    :queues:
+#      - critical
+      - default
     class: ResourceNotification
     description: "This job sends resource to user email"
+    :concurrency: 5
+    :timeout: 30
+    :verbose: false
+    production:
+      :concurrency: 6
+    staging:
+      :concurrency: 5
+
