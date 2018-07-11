@@ -7,13 +7,25 @@ require 'warden'
 require_relative 'helpers/auth_helper'
 require 'sinatra/assetpack'
 require 'sass'
+require 'sidekiq'
+require 'redis'
+require 'sidekiq/scheduler'
+require 'sidekiq/api'
+require 'sidekiq/web'
+require_relative 'workers/notification.rb'
 
 
-
+Sidekiq::Scheduler.dynamic = true
 set :database_file, 'config/database.yml'
 ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'] || 'postgres://localhost/micro_learning')
 
 Dir[File.join(File.dirname(__FILE__), 'controllers', '*.rb')].each { |lib| require_relative lib }
+Dir[File.join(File.dirname(__FILE__), 'workers', '*.rb')].each { |file| load file }
+
+
+Sidekiq.configure_client do |config|
+  config.redis = { :size => 1 }
+end
 
 class App < Sinatra::Base
   enable :static
@@ -28,7 +40,6 @@ class App < Sinatra::Base
   register Sinatra::App::UserTopicController
   register Sinatra::App::TopicResourceController
   helpers Sinatra::App::Mailer
-
 
   use Warden::Manager do |manager|
     manager.default_strategies :password
@@ -79,7 +90,26 @@ end
     File.read(File.join('public', "#{view.to_s}.html"))
   end
 
-end
+  get '/test' do
+    stats = Sidekiq::Stats.new
+    workers = Sidekiq::Workers.new
+    "
+		<p>Processed: #{stats.processed}</p>
+		<p>In Progress: #{workers.size}</p>
+		<p>Enqueued: #{stats.enqueued}</p>
+		<p><a href='/test'>Refresh</a></p>
+		<p><a href='/test/add_job'>Add Job</a></p>
+		<p><a href='/sidekiq'>Dashboard</a></p>
+		"
+  end
 
+  get '/test/add_job' do
+    "
+		<p>Added Job: #{ResourceNotification.set(:queue => :default).perform_async}</p>
+		<p><a href='/'>Back</a></p>
+		"
+  end
+
+end
 
 require_relative 'models/init'

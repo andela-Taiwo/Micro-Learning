@@ -33,6 +33,10 @@ module Sinatra
             flash[:error] = error
             redirect '/topic'
           else
+            @resources = @topic.resources
+            @resources =  @resources.sample(1)
+            puts @resources[0].title
+            MailWorker.perform_at(2.minutes, current_user.email, @resources[0].url)
             flash[:success] = 'Successfully add a new topic to your learning path'
             redirect '/dashboard'
           end

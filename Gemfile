@@ -16,6 +16,13 @@ gem 'sinatra-flash', '~> 0.3.0'
 gem "warden", "1.2.1"
 gem 'sinatra-assetpack'
 gem 'sass'
+gem 'sidekiq'
+gem 'clockwork'
+gem 'sidekiq-scheduler'
+gem 'rufus-scheduler'
+gem 'redis'
+gem "foreman"
+
 
 group :development do
   gem 'shotgun'
