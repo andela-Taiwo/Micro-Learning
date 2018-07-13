@@ -1,11 +1,7 @@
 <div class="container">
-  <div class="row">
-
-    <h4><%= @resource.title %></h4>
-  </div>
   <hr>
   <div class="row row-margin-bottom">
-    <div class="col-md-5 no-padding lib-item" data-category="view">
+    <div class="col-md-10 no-padding lib-item" data-category="view">
       <div class="lib-panel">
         <div class="row box-shadow">
           <div class="col-md-6">
@@ -16,8 +12,11 @@
               <%= @resource.title %>
               <div class="lib-header-seperator"></div>
             </div>
-            <div class="lib-row lib-desc">
+            <div class="lib-row ">
               <%= @resource.description %>
+            </div>
+            <div class="lib-row  text-center " style="padding: 0 10px; margin-top: 30px">
+             <p><span><a href="<%= @resource.url %>" target=”_blank”>Click this link for more information </a> </span></p>
             </div>
           </div>
         </div>

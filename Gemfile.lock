@@ -136,6 +136,7 @@ DEPENDENCIES
   sinatra-activerecord
   sinatra-assetpack
   sinatra-flash (~> 0.3.0)
+  tilt
   warden (= 1.2.1)
 
 BUNDLED WITH

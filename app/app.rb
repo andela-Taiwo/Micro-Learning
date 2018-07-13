@@ -2,7 +2,6 @@ require 'sinatra'
 require 'dotenv/load'
 require 'sinatra/activerecord'
 require 'erb'
-require_relative 'helpers/mailer'
 require 'warden'
 require_relative 'helpers/auth_helper'
 require 'sinatra/assetpack'
@@ -39,7 +38,6 @@ class App < Sinatra::Base
   register Sinatra::App::ResourceController
   register Sinatra::App::UserTopicController
   register Sinatra::App::TopicResourceController
-  helpers Sinatra::App::Mailer
 
   use Warden::Manager do |manager|
     manager.default_strategies :password
@@ -91,6 +89,7 @@ end
   end
 
   get '/test' do
+    check_admin_authentication
     stats = Sidekiq::Stats.new
     workers = Sidekiq::Workers.new
     "
@@ -104,6 +103,7 @@ end
   end
 
   get '/test/add_job' do
+    check_admin_authentication
     "
 		<p>Added Job: #{ResourceNotification.set(:queue => :default).perform_async}</p>
 		<p><a href='/'>Back</a></p>

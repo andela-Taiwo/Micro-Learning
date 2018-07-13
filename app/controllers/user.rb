@@ -46,21 +46,62 @@ module  Sinatra
 
         app.get '/admin' do
           check_admin_authentication
-          @topics = Topic.all
-          @resources = Resource.all
-          @users = User.all
-           erb :admin
+          @topics = Topic.order('updated_at  DESC, id  DESC ')
+          @resources = Resource.order('updated_at  DESC, id  DESC ')
+          @users = User.order('updated_at  DESC, id  DESC ')
+          erb :admin
+        end
+        app.get '/admin/users' do
+          check_admin_authentication
+          @users = User.order('id  ASC, updated_at  ASC ')
+          erb :users
         end
 
+        app.get '/admin/user/:id/edit' do
+          check_admin_authentication
+          @user = User.find_by(id: params[:id])
+          erb :edit_user
+        end
+
+        app.patch '/admin/user/:id/role' do
+          check_admin_authentication
+          @user = User.find_by_id( params[:id])
+          if params.has_key?('admin') && @user.update_column(:admin, params[:admin])
+            flash[:success] = "Successfully updated #{@user.username} role"
+            redirect 'admin/users'
+          else
+            flash[:error] = 'Unable to update the user role.'
+            redirect to '/admin/users'
+          end
+          erb :users
+        end
+
+        app.delete '/admin/user/:id/delete' do
+          check_admin_authentication
+          puts params
+          @user = User.find_by(id: params[:id])
+          puts @user.username
+          puts @user.id
+          users = User.order('updated_at  DESC, id  DESC ')
+          if users.delete(@user)
+            flash[:success] = "Successfully deleted #{@user.username}"
+            redirect to '/admin/users'
+          else
+            flash[:error] = 'Unable to delete the user .'
+            redirect to '/admin/users'
+          end
+          erb :users
+        end
 
         app.post '/signup' do
           @user = User.new(params[:user])
           @errors = {}
           if @user.save
             warden_handler.set_user(@user)
-            send_mail(@user['email'])
+            MailWorker.perform_at(1.minutes, current_user.email, current_user.username, nil) if current_user.email
+            warden_handler.logout
             flash[:success] = 'Please confirm your email address to continue'
-            redirect '/login'
+            redirect to '/login'
           else
             @errors = @user.errors.to_json
             error = JSON.parse(@errors)

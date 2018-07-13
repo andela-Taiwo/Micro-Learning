@@ -35,8 +35,7 @@ module Sinatra
           else
             @resources = @topic.resources
             @resources =  @resources.sample(1)
-            puts @resources[0].title
-            MailWorker.perform_at(2.minutes, current_user.email, @resources[0].url)
+            MailWorker.perform_at(1.minutes, current_user.email, current_user.username, @topic.title) if current_user.email
             flash[:success] = 'Successfully add a new topic to your learning path'
             redirect '/dashboard'
           end
