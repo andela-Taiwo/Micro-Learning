@@ -1,0 +1,11 @@
+<% if @user %>
+  <form method="post" action="/admin/user/<%=@user.id %>/role" class="sm">
+    <div class="form-group sm">
+      <label for="exampleFormControlInput1">Admin</label>
+      <input type="text" class="form-control" id="admin_status" placeholder="admin status" name="admin" value="<%= @user.admin %>">
+    </div>
+    <input id="hidden" type="hidden" name="_method" value="PATCH">
+    <input type="submit" value="Edit" class="btn btn-primary">
+  </form>
+
+<% end%>

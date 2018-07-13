@@ -23,7 +23,7 @@ module Sinatra
           id = params[:id]
           @topic_resources = @topic.resources
           @resource = @topic.resources.find(params[:resource_id])
-          if  @topic_resources.delete(@resource)
+          if @topic_resources.delete(@resource)
             flash[:success] = 'Successfully remove the resource.'
             redirect '/admin/topic/' + id + '/resources'
           else
@@ -49,8 +49,9 @@ module Sinatra
         app.post '/admin/topic/:id/resources' do
           check_admin_authentication
           id = params[:id]
-          resource_id = params[:topic][:resource_ids]
-          resources = Resource.find(resource_id)
+          puts params
+          resource_id = params[:topic][:resource_ids]  if params.has_key?('topic')
+          resources = Resource.find_by(id: resource_id)
           @topic = Topic.find_by(id: params[:id])
           existing_resources = @topic.resources.find_by(id: resource_id)
 

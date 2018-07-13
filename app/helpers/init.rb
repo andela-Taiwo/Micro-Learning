@@ -1,1 +1,1 @@
-require_relative 'mailer'
+require_relative 'auth_helper'

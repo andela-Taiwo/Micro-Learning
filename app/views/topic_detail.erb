@@ -1,0 +1,46 @@
+<% if @topic %>
+<div class="container">
+  <div class="row">
+
+    <h4><%= @topic.title %></h4>
+  </div>
+  <hr>
+
+  <div class="row  row-margin-bottom ">
+      <div class="col-md-8 no-padding lib-item" data-category="view">
+        <div class="lib-panel">
+          <div class="topic row box-shadow">
+            <div class="col-md-6">
+              <img class="lib-img-show" src="http://lorempixel.com/850/850/?random=123" height="100%">
+            </div>
+            <div class="col-md-6">
+              <div class="lib-row lib-header">
+                <%= @topic.title %>
+                <div class="lib-header-seperator"></div>
+              </div>
+              <div class="lib-row">
+                <p><%= @topic.description %></p>
+              </div>
+              <div class="lib-row topic-btn">
+                <%= @topic.updated_at %>
+                <div class="topic-form">
+                  <form method="post" action="/user/topics/<%=@topic.id %>">
+                    <input type="submit" value="Enroll" class="btn btn-outline-primary btn-sm">
+                  </form>
+                  <form method="get" action="/user/topics/<%=@topic.id %>/resources">
+                    <input type="submit" value="Resource" class="btn btn-outline-info btn-sm">
+                  </form>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-1"></div>
+  </div>
+
+</div>
+  <% else %>
+  <h3>No detail for this topic</h3>
+<% end %>

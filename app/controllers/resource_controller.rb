@@ -11,7 +11,7 @@ module Sinatra
 
         app.get '/resources' do
           check_authentication
-          @topics = Resources.all
+          @resources = Resource.order('created_at DESC')
           erb  :resources
         end
 
@@ -31,10 +31,11 @@ module Sinatra
 
         app.get '/admin/resource' do
           check_admin_authentication
-            @resources = Resource.all
+            @resources = Resource.order('updated_at DESC')
             @title = 'Resources'
             erb :resource_form
         end
+
         app.get '/admin/resource/:id' do
         check_admin_authentication
         @resource = Resource.find_by_id(params[:id])
@@ -47,9 +48,10 @@ module Sinatra
           @resource = Resource.find_by_id(params[:id])
           if @resource
             erb :edit_resource_form
+
             @resource.title = params[:title] if params.has_key?('title')
             @resource.description = params[:description] if params.has_key?('description')
-            @resource.url = params[:description] if params.has_key?('url')
+            @resource.url = params[:url] if params.has_key?('url')
 
             if @resource.save
               flash[:success] = 'Successfully updated the resource'

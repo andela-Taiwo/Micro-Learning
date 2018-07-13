@@ -22,7 +22,7 @@ gem 'sidekiq-scheduler'
 gem 'rufus-scheduler'
 gem 'redis'
 gem "foreman"
-
+gem 'tilt'
 
 group :development do
   gem 'shotgun'

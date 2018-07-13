@@ -11,16 +11,29 @@ module Sinatra
 
         app.get '/topics' do
           check_authentication
-          @topics = Topic.all
+          @topics = Topic.order('updated_at  DESC, id  DESC ')
           erb  :topics
+        end
+
+        app.get '/topic/:id' do
+          check_authentication
+          @topic = Topic.find_by(id: params[:id])
+          if @topic
+            erb  :topic_detail
+          else
+            flash[:error] = "Topic not found"
+            redirect '/topics'
+          end
+
         end
 
         app.get '/user/topics/:id/resources' do
           check_authentication
-          @topic = Topic.find(params[:id])
-          @resources = @topic.resources
-          @resources =  @resources.sample(1)
-          erb  :user_topic_resources
+          @topic = Topic.find_by(id: params[:id])
+          @resources = @topic.resources unless @topic.nil?
+          @resource =  @resources.sample(1)
+          @resource = @resource[0]
+          erb  :resource
         end
 
         app.post '/admin/topic' do
@@ -39,7 +52,7 @@ module Sinatra
 
         app.get '/admin/topic' do
           check_admin_authentication
-            @topics = Topic.all
+            @topics = Topic.order('updated_at  DESC, id  DESC ')
             @title = 'Topic'
             erb :topic_form
         end

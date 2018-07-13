@@ -1,0 +1,60 @@
+<%if @users %>
+  <table class="table  table-hover">
+    <thead>
+    <tr>
+      <th scope="col">Id </th>
+      <th scope="col">Username</th>
+      <th scope="col">Email</th>
+      <th scope="col">Admin Status</th>
+      <th scope="col">Date Joined</th>
+      <th scope="col">Actions</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <th scope="col"><%=user.id%></th>
+        <td><%=user.username%></td>
+        <td><%=user.email%></td>
+        <td><%=user.admin%></td>
+        <td><%=user.created_at%></td>
+        <td>
+          <form method="get" action="/admin/user/<%=user.id %>/edit">
+            <input type="submit" value="Edit" class="btn btn-outline-info btn-sm">
+          </form>
+        </td>
+        <td>
+          <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#myModal<%= user.id %>">Delete</button>
+        </td>
+        <!-- Modal HTML -->
+        <div id="myModal<%= user.id %>" class="modal fade modal-sm>">
+          <div class="modal-dialog modal-confirm">
+            <div class="modal-content">
+              <div class="modal-header">
+                <div class="icon-box">
+                  <i class="material-icons">&#xE5CD;</i>
+                </div>
+                <h4 class="modal-title">Are you sure?</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              </div>
+              <div class="modal-body">
+                <p>Do you really want to delete the record? This process cannot be undone.</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
+                <form method="post" action="/admin/user/<%=user.id %>/delete">
+                  <input id="hidden" type="hidden" name="_method" value="DELETE">
+                  <input type="submit" value="Delete" class="btn btn-outline-danger" >
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </tr>
+
+    <%end%>
+    </tbody>
+  </table>
+
+<% end%>
