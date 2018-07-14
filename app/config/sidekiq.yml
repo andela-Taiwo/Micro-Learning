@@ -1,6 +1,6 @@
  resource_notification:
     cron: '00 10 * * *'   # Runs once per 2 minute
-#    every: 2h
+#    every: 2m
     :queues:
 #      - critical
       - default

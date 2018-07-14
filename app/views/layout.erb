@@ -17,12 +17,15 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body class="text-centre">
-<div class="container " role="main">
+<div class="container dark-overlay" role="main">
+  <div class="overlay"></div>
   <header class="masthead mb-auto">
     <div class="inner">
-      <h3 class="masthead-brand">3L</h3>
-      <nav class="nav nav-masthead justify-content-center fixed-top">
+
+      <nav class="nav nav-masthead fixed-top my-nav">
+        <h3 class="navbar-brand mr-auto">3L</h3>
         <a class="nav-link active" href="/">Home</a>
+        <a class="nav-link" href="/about">About us</a>
         <% if admin_logged_in?  %>
         <a class="nav-link" href="/admin">Admin Dashboard</a>
           <a class="nav-link" href="/admin/topic">Topics</a>
@@ -38,6 +41,7 @@
           <% else %>
           <a class="nav-link" href="/signup">Signup</a>
           <a class="nav-link" href="login">Login</a>
+
           <% end %>
       </nav>
     </div>

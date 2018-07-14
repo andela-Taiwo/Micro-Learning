@@ -12,7 +12,7 @@ module Sinatra
         app.get '/resources' do
           check_authentication
           @resources = Resource.order('created_at DESC')
-          erb  :resources
+          erb  :'resources/resources'
         end
 
         app.post '/admin/resource' do
@@ -33,21 +33,21 @@ module Sinatra
           check_admin_authentication
             @resources = Resource.order('updated_at DESC')
             @title = 'Resources'
-            erb :resource_form
+            erb :'resources/resource_form'
         end
 
         app.get '/admin/resource/:id' do
         check_admin_authentication
         @resource = Resource.find_by_id(params[:id])
         if @resource
-          erb :edit_resource_form
+          erb :'resources/edit_resource_form'
         end
         end
         app.patch '/admin/resource/:id/edit' do
           check_admin_authentication
           @resource = Resource.find_by_id(params[:id])
           if @resource
-            erb :edit_resource_form
+            erb :'resources/edit_resource_form'
 
             @resource.title = params[:title] if params.has_key?('title')
             @resource.description = params[:description] if params.has_key?('description')

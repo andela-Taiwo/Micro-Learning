@@ -13,7 +13,7 @@ class ResourceNotification
   include Sidekiq::Worker
   uri = URI.parse(ENV["REDISCLOUD_URL"] || "redis://localhost:6379/")
   $redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
-  def perform (msg = "send resource")
+  def perform (msg = "send resource notification to registered user")
     users = User.all
     puts 'Load all users'
     users.each do |user|
@@ -22,20 +22,27 @@ class ResourceNotification
       if topic[0]
         resources = topic[0].resources
         resource = resources.sample(1)
-        $redis.lpush(msg, activate_email(user.email, resource[0].url)) if resource[0]
+        username = user.username
+        $redis.lpush(msg, activate_email(user.email, resource[0].url, topic[0].title, username )) if resource[0]
       end
     end
   end
 
-  def activate_email(recipient, url)
-    send_mail(recipient, url)
+  def activate_email(recipient, url, topic, username)
+    send_mail(recipient, url, topic, username)
   end
-  def send_mail (recipient, url)
+  def send_mail (recipient, url, topic, username)
+    path = File.expand_path('../views/resource_notification.erb',
+                            File.dirname(__FILE__))
+
+    file = ERB.new(File.read(path)).result(binding)
+
 
     Pony.options = {
-        :subject => "Resource Notification",
+        :subject => "Daily Resource Notification",
+        :headers => { 'Content-Type' => 'text/html' },
         :via => :smtp,
-        :body => (url),
+        :body  =>  file,
         :via_options => {
             :address              => 'smtp.gmail.com',
             :port                 => '587',

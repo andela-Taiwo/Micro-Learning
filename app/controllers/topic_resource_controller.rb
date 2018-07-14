@@ -14,7 +14,7 @@ module Sinatra
           @topic = Topic.find_by(id: params[:id])
           @topic_resources = @topic.resources
           @title = 'Topic Resources'
-          erb :topic_resources
+          erb :'resources/topic_resources'
         end
 
         app.delete '/admin/topic/:id/resource/:resource_id/delete' do
@@ -39,7 +39,7 @@ module Sinatra
           @topic_resources = @topic.resources
           @resource = @topic.resources.find(params[:resource_id])
           if @resource
-            erb :resource
+            erb :'resources/resource'
           else
             flash[:halt] = 'Resource could not be found.'
             redirect '/admin/topic/' + id + '/resources'
@@ -51,14 +51,15 @@ module Sinatra
           id = params[:id]
           puts params
           resource_id = params[:topic][:resource_ids]  if params.has_key?('topic')
-          resources = Resource.find_by(id: resource_id)
+          resources = Resource.find(resource_id) unless resources.nil?
           @topic = Topic.find_by(id: params[:id])
           existing_resources = @topic.resources.find_by(id: resource_id)
 
           if existing_resources
-            flash[:error] = 'The resource already exist for the topic.'
+            flash[:error] = "The resource #{existing_resources.title}already exist for the topic."
             redirect '/admin/topic/' + id + '/resources'
           elsif @topic && resources
+            puts resources
             @topic.resources <<  resources
             flash[:success] = 'Resource successfully added to the topic.'
             redirect '/admin/topic/' + id + '/resources'

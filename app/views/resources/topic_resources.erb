@@ -1,0 +1,90 @@
+<div class="container card dataform">
+  <h4><%= @title %></h4>
+  <% if @topic && @resources %>
+      <form method="post" action="">
+        <div class="boundry">
+          <% @resources.each do |resource| %>
+            <div class="input-group mb-3 ">
+              <div class="input-group-prepend">
+                <div class="input-group-text">
+                  <input type="checkbox" aria-label="Checkbox for following text input" name="topic[resource_ids][]" value="<%=resource.id%>" id="<%=resource.id%>">
+                </div>
+              </div>
+              <label  class="form-control"><span><%= resource.title  %></span></label>
+            </div>
+          <% end %>
+        </div>
+        <button type="submit" class="authbutton btn btn-primary">Add Resources</button>
+
+      </form>
+  <%end%>
+  </div>
+
+
+<%if @topic_resources.length > 0 %>
+  <div class="table-responsive table_boundry">
+    <table class="table  table-hover">
+      <thead>
+      <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Url</th>
+        <th scope="col">Last Updated</th>
+        <th scope="col">Actions</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @topic_resources.each do |resource| %>
+        <tr>
+          <td><%=resource.title%></td>
+          <td><%=resource.url%></td>
+          <td><%=resource.updated_at.to_date%></td>
+          <td>
+            <form method="get" action="/admin/topic/<%=@topic.id %>/resource/<%=resource.id %> ">
+              <input type="submit" value="View" class="btn btn-outline-info btn-sm">
+            </form>
+          </td>
+
+          <td>
+            <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#myModal<%= resource.id %>">Delete</button>
+          </td>
+          <!-- Modal HTML -->
+          <div id="myModal<%= resource.id %>" class="modal fade modal-sm>">
+            <div class="modal-dialog modal-confirm">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <div class="icon-box">
+                    <i class="material-icons">&#xE5CD;</i>
+                  </div>
+                  <h4 class="modal-title">Are you sure?</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                  <p>Do you really want to delete the resource? This process cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
+                  <form method="post" action="/admin/topic/<%=@topic.id %>/resource/<%=resource.id %>/delete">
+                    <input id="hidden" type="hidden" name="_method" value="DELETE">
+                    <input type="submit" value="Delete" class="btn btn-outline-danger" >
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </tr>
+      <%end%>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="row dash-row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body text-center">
+          <h3 class="text-center">No resource available for this topic </h3>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end%>
