@@ -29,5 +29,8 @@ group :development do
 end
 
 group :test do
+  gem 'sqlite3'
   gem "rspec_junit_formatter"
+  gem 'database_cleaner'
+  gem "factory_bot", "~> 4.0", :require => false
 end
