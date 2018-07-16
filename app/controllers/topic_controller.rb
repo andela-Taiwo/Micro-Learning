@@ -12,14 +12,14 @@ module Sinatra
         app.get '/topics' do
           check_authentication
           @topics = Topic.order('updated_at  DESC, id  DESC ')
-          erb  :topics
+          erb  :'topics/topics'
         end
 
         app.get '/topic/:id' do
           check_authentication
           @topic = Topic.find_by(id: params[:id])
           if @topic
-            erb  :topic_detail
+            erb  :'topics/topic_detail'
           else
             flash[:error] = "Topic not found"
             redirect '/topics'
@@ -33,7 +33,7 @@ module Sinatra
           @resources = @topic.resources unless @topic.nil?
           @resource =  @resources.sample(1)
           @resource = @resource[0]
-          erb  :resource
+          erb  :'resources/resource'
         end
 
         app.post '/admin/topic' do
@@ -54,21 +54,21 @@ module Sinatra
           check_admin_authentication
             @topics = Topic.order('updated_at  DESC, id  DESC ')
             @title = 'Topic'
-            erb :topic_form
+            erb :'topics/topic_form'
         end
 
         app.get '/admin/topic/:id' do
         check_admin_authentication
         @topic = Topic.find_by_id(params[:id])
         if @topic
-          erb :edit_topic_form
+          erb :'topics/edit_topic_form'
         end
         end
         app.patch '/admin/topic/:id/edit' do
           check_admin_authentication
           @topic = Topic.find_by_id(params[:id])
           if @topic
-            erb :edit_topic_form
+            erb :'topics/edit_topic_form'
             @topic.title = params[:title] if params.has_key?('title')
             @topic.description = params[:description] if params.has_key?('description')
             if @topic.save

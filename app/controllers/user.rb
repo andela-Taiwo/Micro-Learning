@@ -11,7 +11,7 @@ module  Sinatra
 
         app.get '/signup' do
           @title = 'SignUp Form'
-          erb :signup
+          erb :'users/signup'
         end
 
 
@@ -24,13 +24,13 @@ module  Sinatra
 
         app.get '/login' do
           @title = 'Login Form'
-          erb :login
+          erb :'users/login'
         end
         app.post '/login' do
           if  env['warden'].authenticate(:admin)
             redirect '/admin', flash[:success] = 'Successfully logged in'
           elsif  env['warden'].authenticate!
-            redirect '/dashboard', flash[:success] = 'Successfully logged in'
+            redirect '/topics', flash[:success] = 'Successfully logged in'
           else
             redirect '/login', flash[:error] = 'Incorrect email or password'
           end
@@ -49,18 +49,18 @@ module  Sinatra
           @topics = Topic.order('updated_at  DESC, id  DESC ')
           @resources = Resource.order('updated_at  DESC, id  DESC ')
           @users = User.order('updated_at  DESC, id  DESC ')
-          erb :admin
+          erb :'users/admin'
         end
         app.get '/admin/users' do
           check_admin_authentication
-          @users = User.order('id  ASC, updated_at  ASC ')
-          erb :users
+          @users = User.order(' created_at DESC, updated_at  ASC ')
+          erb :'users/users'
         end
 
         app.get '/admin/user/:id/edit' do
           check_admin_authentication
           @user = User.find_by(id: params[:id])
-          erb :edit_user
+          erb :'users/edit_user'
         end
 
         app.patch '/admin/user/:id/role' do
@@ -73,7 +73,7 @@ module  Sinatra
             flash[:error] = 'Unable to update the user role.'
             redirect to '/admin/users'
           end
-          erb :users
+          erb :'users/users'
         end
 
         app.delete '/admin/user/:id/delete' do
@@ -82,7 +82,7 @@ module  Sinatra
           @user = User.find_by(id: params[:id])
           puts @user.username
           puts @user.id
-          users = User.order('updated_at  DESC, id  DESC ')
+          users = User.order('created_at DESC, updated_at  ASC')
           if users.delete(@user)
             flash[:success] = "Successfully deleted #{@user.username}"
             redirect to '/admin/users'
@@ -90,7 +90,7 @@ module  Sinatra
             flash[:error] = 'Unable to delete the user .'
             redirect to '/admin/users'
           end
-          erb :users
+          erb :'users/users'
         end
 
         app.post '/signup' do

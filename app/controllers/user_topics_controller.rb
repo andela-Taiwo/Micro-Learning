@@ -13,8 +13,8 @@ module Sinatra
           check_authentication
           user_id = current_user.id
           @user= User.find(user_id)
-          @user_topics = @user.topics
-          erb  :dashboard
+          @user_topics = @user.topics.order('created_at DESC')
+          erb  :'users/dashboard'
         end
 
         app.post '/user/topics/:id' do

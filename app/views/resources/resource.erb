@@ -1,15 +1,13 @@
 <div class="container">
+  <% if @resource  %>
   <hr>
-  <div class="row row-margin-bottom">
-    <div class="col-md-10 no-padding lib-item" data-category="view">
+  <div class="row row-margin-bottom resource-card table_boundry">
+    <div class="col-md-12 no-padding lib-item" data-category="view">
       <div class="lib-panel">
         <div class="row box-shadow">
-          <div class="col-md-6">
-            <img class="lib-img-show" src="http://lorempixel.com/850/850/?random=123">
-          </div>
-          <div class="col-md-6">
+          <div class="col-md-12">
             <div class="lib-row lib-header">
-              <%= @resource.title %>
+             <h3><%= @resource.title %></h3>
               <div class="lib-header-seperator"></div>
             </div>
             <div class="lib-row ">
@@ -24,4 +22,16 @@
     </div>
     <div class="col-md-1"></div>
   </div>
+    <% else %>
+    <div class="row dash-row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-body text-center">
+            <h3 class="text-center">No resource yet for the course </h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <% end %>
 </div>

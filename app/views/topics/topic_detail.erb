@@ -1,16 +1,12 @@
-<% if @topic %>
-<div class="container">
-  <div class="row">
 
-    <h4><%= @topic.title %></h4>
-  </div>
-  <hr>
+<div class="container resource-card">
+<% if @topic %>
 
   <div class="row  row-margin-bottom ">
-      <div class="col-md-8 no-padding lib-item" data-category="view">
+      <div class="col-md-10 no-padding lib-item table_boundry" data-category="view">
         <div class="lib-panel">
           <div class="topic row box-shadow">
-            <div class="col-md-6">
+            <div class="col-md-4">
               <img class="lib-img-show" src="http://lorempixel.com/850/850/?random=123" height="100%">
             </div>
             <div class="col-md-6">
@@ -40,7 +36,16 @@
       <div class="col-md-1"></div>
   </div>
 
-</div>
+
   <% else %>
-  <h3>No detail for this topic</h3>
+ <div class="row dash-row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-body text-center">
+            <h3 class="text-center">No detail available for this course now. Check back later. </h3>
+          </div>
+        </div>
+      </div>
+    </div>
 <% end %>
+</div>

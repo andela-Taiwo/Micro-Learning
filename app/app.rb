@@ -20,6 +20,9 @@ ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'] || 'postgres://local
 
 Dir[File.join(File.dirname(__FILE__), 'controllers', '*.rb')].each { |lib| require_relative lib }
 Dir[File.join(File.dirname(__FILE__), 'workers', '*.rb')].each { |file| load file }
+# Dir[File.join(File.dirname(__FILE__), 'controllers', '*.rb')].each { |lib| require_relative lib }
+
+
 
 
 Sidekiq.configure_client do |config|

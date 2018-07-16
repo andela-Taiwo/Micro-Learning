@@ -1,0 +1,69 @@
+<!--<h1>Dashboard</h1>-->
+<div class="container card user-dash">
+  <h2>Welcome <strong><%= @user.username.capitalize%></strong></h2>
+  <br>
+  <br>
+  <h3 class="table-header">Enrolled Courses</h3>
+  <% if @user_topics %>
+    <table class="table  table-hover table_boundry">
+      <thead>
+      <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Last Updated</th>
+        <th scope="col">Actions</th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @user_topics.each do |topic| %>
+        <tr>
+          <td><%=topic.title%></td>
+          <td><%=topic.updated_at.to_date%></td>
+          <td>
+            <form method="get" action="/topic/<%=topic.id %>">
+              <input type="submit" value="View" class="btn btn-outline-info btn-sm">
+            </form>
+          </td>
+          <td>
+            <form method="get" action="user/topics/<%=topic.id %>/resources">
+              <input type="submit" value="Resources" class="btn btn-outline-primary btn-sm">
+            </form>
+          </td>
+          <td>
+            <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#myModal<%= topic.id %>">Delete</button>
+          </td>
+          <!-- Modal HTML -->
+          <div id="myModal<%= topic.id %>" class="modal fade modal-sm>">
+            <div class="modal-dialog modal-confirm">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <div class="icon-box">
+                    <i class="material-icons">&#xE5CD;</i>
+                  </div>
+                  <h4 class="modal-title">Are you sure?</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                  <p>Do you really want to delete the topic? This process cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
+                  <form method="post" action="/user/topic/<%=topic.id %>/delete">
+                    <input id="hidden" type="hidden" name="_method" value="DELETE">
+                    <input type="submit" value="Delete" class="btn btn-outline-danger" >
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </tr>
+      <%end%>
+      </tbody>
+    </table>
+  <% else %>
+    <h3>You have not added any topic</h3>
+  <% end %>
+
+</div>
