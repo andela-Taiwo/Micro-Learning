@@ -15,15 +15,15 @@ require_relative 'workers/notification.rb'
 
 
 Sidekiq::Scheduler.dynamic = true
-set :database_file, 'config/database.yml'
-ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'] || 'postgres://localhost/micro_learning')
+if ENV['RACK_ENV'] == 'production' || ENV['RACK_ENV'] == 'development'
+  ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'] || 'postgres://localhost/micro_learning')
+else
+  ActiveRecord::Base.establish_connection(:adapter => "sqlite3",
+                                          :database => "db/#{ENV['SINATRA_ENV']}.sqlite")
+end
 
 Dir[File.join(File.dirname(__FILE__), 'controllers', '*.rb')].each { |lib| require_relative lib }
 Dir[File.join(File.dirname(__FILE__), 'workers', '*.rb')].each { |file| load file }
-# Dir[File.join(File.dirname(__FILE__), 'controllers', '*.rb')].each { |lib| require_relative lib }
-
-
-
 
 Sidekiq.configure_client do |config|
   config.redis = { :size => 1 }
