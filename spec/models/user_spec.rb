@@ -1,33 +1,47 @@
-RSpec.describe User, :type => :model do
-  it 'is invalid without email', :focus => true do
-    user = User.new
-    user.should_not be_valid
-  end
-  it 'is invalid without password', :focus => true do
-    user = User.new(email: 'e.example.com')
-    user.should_not be_valid
-  end
-  it 'is invalid without confirmation password', :focus => true do
-    user = User.new(email: 'e.example.com', password: 'testpass')
-    user.should_not be_valid
-  end
-  it 'is invalid when the length of username is less than 3', :focus => true do
-    user = User.new(email: 'e.example.com', password: 'testpass', username: 'a', password_confirmation: 'testpass')
-    user.should_not be_valid
+RSpec.describe User, type: :model do
+  it 'should have valid Factory' do
+    expect(FactoryBot.create(:user)).to be_valid
   end
 
-  it 'is invalid when password does not match', :focus => true do
-    user = User.new(email: 'e.example.com', password: 'testpass', username: 'a', password_confirmation: 'testpass23')
-    user.should_not be_valid
-  end
+  describe 'Validations' do
+    context 'should not have a invalid email address' do
+      it 'is blank email', :focus => true do
+        user = User.new(email: '', password: 'testpass', username: 'test123')
+        user.should_not be_valid
+      end
+    end
+    context 'should not have a invalid username' do
+      it 'is blank username', :focus => true do
+        user = User.new(email: 'e@example.com', password: 'testpass',
+                        username: '', password_confirmation: 'testpass')
+        user.should_not be_valid
+      end
+      it 'username too short', :focus => true do
+        user = User.new(email: 'e@example.com', password: 'testpass',
+                        username: 'pi', password_confirmation: 'testpass')
+        user.should_not be_valid
+      end
+    end
 
-  it 'is invalid when email is blank', :focus => true do
-    user = User.new(email: 'e.example.com', password: 'testpass', username: 'a', password_confirmation: 'testpass23')
-    user.should_not be_valid
-  end
+    context 'should have valid password and confirmation password' do
+      it 'is invalid when password does not match', :focus => true do
+      user = User.new(email: 'e.example.com', password: 'testpass',
+                      username: 'a', password_confirmation: 'testpass23')
+      user.should_not be_valid
+      end
+      it 'length of password is less than 6', :focus => true do
+      user = User.new(email: 'e.example.com', password: 'test',
+                      username: 'henry', password_confirmation: 'test')
+      user.should_not be_valid
+      end
+    end
 
-  it 'is valid when valid data is supplied', :focus => true do
-    user = User.new(email: 'e.example.com', password: 'testpass', username: 'testadm', password_confirmation: 'testpass')
-    user.should be_valid
+    context 'valid user' do
+      it 'when valid data is supplied', :focus => true do
+        user = User.new(email: 'e.example.com', password: 'testpass',
+                        username: 'testadm', password_confirmation: 'testpass')
+        user.should be_valid
+      end
+    end
   end
 end

@@ -1,27 +1,29 @@
-RSpec.describe Topic, :type => :model do
-  it 'is invalid without email', :focus => true do
-    topic = Topic.new
-    topic.should_not be_valid
-  end
-  it 'is invalid without description', :focus => true do
-    topic = Topic.new(title: 'test title')
-    topic.should_not be_valid
-  end
-  it 'is invalid without title', :focus => true do
-    topic = Topic.new(description: 'test title')
-    topic.should_not be_valid
-  end
-  it 'is creat topic with valid data', :focus => true do
-    topic = Topic.new(title: 'Admin test', description: 'test that topic is created')
-    topic.should be_valid
-  end
-  it 'is invalid if title is blank', :focus => true do
-    topic = Topic.new(title: '', description: 'test title')
-    topic.should_not be_valid
+
+RSpec.describe Topic, type: :model do
+  it 'should have valid Factory' do
+    expect(FactoryBot.create(:topic)).to be_valid
   end
 
-  it 'is invalid if description  is blank', :focus => true do
-    topic = Topic.new(title: 'test title', description: '')
-    topic.should_not be_valid
+  describe 'Validations' do
+    context 'should not have a invalid title' do
+      it 'is blank title', :focus => true do
+      topic = Topic.new(title: '', description: 'test title')
+      topic.should_not be_valid
+      end
+      it 'title too short', :focus => true do
+        topic = Topic.new(title: 'tes', description: 'Element of testing short descr.')
+        topic.should_not be_valid
+      end
+    end
+    context 'should not have a invalid descripton' do
+      it 'is blank description', :focus => true do
+        topic = Topic.new(title: 'test title', description: '')
+        topic.should_not be_valid
+      end
+      it 'description too short', :focus => true do
+        topic = Topic.new(title: 'test title', description: 'Element')
+        topic.should_not be_valid
+      end
+    end
   end
 end
