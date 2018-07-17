@@ -51,7 +51,7 @@ module Sinatra
           id = params[:id]
           puts params
           resource_id = params[:topic][:resource_ids]  if params.has_key?('topic')
-          resources = Resource.find(resource_id) unless resources.nil?
+          resources = Resource.find(resource_id) unless resource_id.nil?
           @topic = Topic.find_by(id: params[:id])
           existing_resources = @topic.resources.find_by(id: resource_id)
 
