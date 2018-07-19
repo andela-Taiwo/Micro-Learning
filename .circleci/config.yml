@@ -15,6 +15,8 @@ jobs:
       - image: circleci/postgres:9.5-alpine
         environment:
           DATABASE_URL: postgresql://ubuntu:@127.0.0.1:5432/circle_test
+          COVERALLS_REPO_TOKEN: jtXkU4g6xAkBD6feVcI20oWmxWxMK6CY9
+          COVERALLS_PARALLEL: true
       - image: redis:4.0.6
 
     working_directory: ~/repo

@@ -52,3 +52,4 @@ build-iPhoneSimulator/
 .idea/
 .vscode/
 **/.DS_Store
+coverage/
