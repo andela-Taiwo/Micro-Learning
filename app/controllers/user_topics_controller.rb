@@ -34,25 +34,27 @@ module Sinatra
             redirect '/topic'
           else
             @resources = @topic.resources
-            @resources =  @resources.sample(1)
-            MailWorker.perform_at(1.minutes, current_user.email, current_user.username, @topic.title) if current_user.email
-            flash[:success] = 'Successfully add a new topic to your learning path'
-            redirect '/dashboard'
+            @resources = @resources.sample(1)
+            if current_user.email
+              message = 'Successfully add a new topic to your learning path'
+              MailWorker.perform_at(1.minutes, current_user.email,
+                                    current_user.username, @topic.title)
+              flash[:success] = message
+              redirect '/dashboard'
+            end
           end
         end
-
-
-
         app.delete '/user/topic/:id/delete' do
           check_authentication
           @user = current_user
           @user_topics = current_user.topics
           @topic = @user_topics.find(params[:id])
-          if  @user_topics.delete(@topic)
+          if @user_topics.delete(@topic)
             flash[:success] = 'Successfully deleted the topic'
             redirect '/dashboard'
           else
             flash[:halt] = 'Unable to delete the topic'
+            redirect '/dashboard'
           end
 
         end

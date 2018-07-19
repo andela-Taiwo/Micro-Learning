@@ -27,12 +27,12 @@ module Sinatra
 
         end
 
-        app.get '/user/topics/:id/resources' do
+        app.get '/user/topics/:id/resource' do
           check_authentication
           @topic = Topic.find_by(id: params[:id])
           @resources = @topic.resources unless @topic.nil?
-          @resource =  @resources.sample(1)
-          @resource = @resource[0]
+          @resource =  @resources.sample(1) unless @resources.nil?
+          @resource = @resource[0] unless @resource.nil?
           erb  :'resources/resource'
         end
 
@@ -69,8 +69,8 @@ module Sinatra
           @topic = Topic.find_by_id(params[:id])
           if @topic
             erb :'topics/edit_topic_form'
-            @topic.title = params[:title] if params.has_key?('title')
-            @topic.description = params[:description] if params.has_key?('description')
+            @topic.title = params[:title].strip if params.has_key?('title') &&  params[:title].strip.length  > 0
+            @topic.description = params[:description].strip if params.has_key?('description')
             if @topic.save
               flash[:success] = 'Successfully updated the topic'
               redirect '/admin/topic'
@@ -84,11 +84,13 @@ module Sinatra
         app.delete '/admin/topic/:id/delete' do
           check_admin_authentication
           @topic = Topic.find_by_id(params[:id])
-          if @topic.destroy
-              flash[:success] = 'Successfully deleted the topic'
-              redirect '/admin/topic'
+          if @topic
+            @topic.destroy
+            flash[:success] = 'Successfully deleted the topic'
+            redirect '/admin/topic'
           else
-              flash[:halt] = 'Unable to delete the topic'
+            flash[:halt] = 'Unable to delete the topic'
+            redirect '/admin/topic'
           end
 
         end
