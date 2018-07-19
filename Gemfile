@@ -33,4 +33,8 @@ group :test do
   gem 'database_cleaner'
   gem 'rspec-sidekiq'
   gem "factory_bot", "~> 4.0", :require => false
+  gem 'simplecov-json', :require => false
+  gem 'simplecov-rcov', :require => false
+  gem 'simplecov-console', :require => false
+
 end
