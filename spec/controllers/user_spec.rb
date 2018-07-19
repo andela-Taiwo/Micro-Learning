@@ -20,13 +20,13 @@ RSpec.describe Sinatra::App:: SignUp do
       }
       follow_redirect!
       expect(last_response).to be_ok
-      expect(last_response.body).
-          to include('Please confirm your email address to continue')
+      expect(last_response.body)
+        .to include('Please confirm your email address to continue')
     end
   end
 
-  context 'returns an error message when user submits' do
-    it 'non-matching password confirmation' do
+  context 'with invalid credential' do
+    it 'with non-matching password confirmation' do
       post '/signup', params: { user:  {
           email: 'example@craftacademy.se', password: 'password',
           password_confirmation: 'wrong_password'
@@ -37,7 +37,7 @@ RSpec.describe Sinatra::App:: SignUp do
       expect(last_response.status).to eq 302
     end
 
-    it 'a blank email' do
+    it 'with a blank email' do
       post '/signup', params = { user:
                                      {
                                        username: 'username',
@@ -52,7 +52,7 @@ RSpec.describe Sinatra::App:: SignUp do
       expect(last_response.status).to eq 200
     end
 
-    it 'short password length' do
+    it 'with short password length' do
       post '/signup', params = { user:
                                      {
                                          username: 'example',
@@ -68,7 +68,7 @@ RSpec.describe Sinatra::App:: SignUp do
 
     end
 
-    it 'an already registered username' do
+    it 'with an already registered username' do
       user = FactoryBot.create(:user)
       post '/signup', params = { user:
                                      {

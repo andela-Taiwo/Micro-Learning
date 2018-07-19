@@ -6,7 +6,7 @@ module Sinatra
       private
 
       def warden_handler
-        env['warden']
+        request.env['warden']
       end
 
       def check_authentication

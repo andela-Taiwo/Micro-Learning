@@ -1,16 +1,17 @@
 ENV['RACK_ENV'] ||= 'test'
-
+require 'coveralls'
 require 'rack/test'
 require 'rspec'
+require 'rspec-sidekiq'
+require 'warden'
 require 'database_cleaner'
-require_relative '../app/helpers/test_helper'
+require 'sidekiq/testing'
 require 'factory_bot'
 
 require File.expand_path '../../app/app.rb', __FILE__
-
+Coveralls.wear!
 module RSpecMixin
   include Rack::Test::Methods
-
   def app
     described_class
   end
@@ -28,19 +29,6 @@ RSpec.configure do |config|
       example.run
     end
   end
-
-  # config.before(:suite) do
-  #   DatabaseCleaner.strategy = :transaction
-  #   DatabaseCleaner.clean_with(:truncation)
-  # end
-  #
-  # config.before(:each) do
-  #   DatabaseCleaner.start
-  # end
-  # config.after(:each) do
-  #   DatabaseCleaner.clean
-  # end
-  config.include Warden::Test::Helpers
   config.include FactoryBot::Syntax::Methods
 
   after { Warden.test_reset! }
@@ -55,4 +43,15 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
   config.shared_context_metadata_behavior = :apply_to_host_groups
+end
+
+RSpec::Sidekiq.configure do |config|
+  # Clears all job queues before each example
+  config.clear_all_enqueued_jobs = true # default => true
+
+  # Whether to use terminal colours when outputting messages
+  config.enable_terminal_colours = true # default => true
+
+  # Warn when jobs are not enqueued to Redis but to a job array
+  config.warn_when_jobs_not_processed_by_sidekiq = false # default => true
 end
