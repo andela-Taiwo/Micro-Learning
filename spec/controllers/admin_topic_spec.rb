@@ -1,14 +1,12 @@
 
 RSpec.describe Sinatra::App:: TopicController do
   include Rack::Test::Methods
-  # include Warden::Test::Helpers
   include Warden::Test::Helpers
 
   after { Warden.test_reset! }
   let(:user) { build :user }
   let(:topic) {create :topic }
   describe 'Admin access topic' do
-    # let(:admin)  { build :admin }
     before { login_as FactoryBot.create(:admin, username: 'testadmin2') }
     Warden.on_next_request do |proxy|
       proxy.set_user(FactoryBot.create(:admin), :scope => :admin)

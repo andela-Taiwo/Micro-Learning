@@ -66,11 +66,11 @@ module  Sinatra
         app.patch '/admin/user/:id/role' do
           check_admin_authentication
           @user = User.find_by_id( params[:id])
-          if params.has_key?('admin') && @user.update_column(:admin, params[:admin])
+          if @user && params.has_key?('admin') && @user.update_column(:admin, params[:admin])
             flash[:success] = "Successfully updated #{@user.username} role"
             redirect 'admin/users'
           else
-            flash[:error] = 'Unable to update the user role.'
+            flash[:error] = 'User does not exist.'
             redirect to '/admin/users'
           end
           erb :'users/users'
@@ -78,16 +78,14 @@ module  Sinatra
 
         app.delete '/admin/user/:id/delete' do
           check_admin_authentication
-          puts params
           @user = User.find_by(id: params[:id])
-          puts @user.username
-          puts @user.id
           users = User.order('created_at DESC, updated_at  ASC')
-          if users.delete(@user)
+          if @user
+            users.delete(@user)
             flash[:success] = "Successfully deleted #{@user.username}"
             redirect to '/admin/users'
           else
-            flash[:error] = 'Unable to delete the user .'
+            flash[:error] = 'User does not exist.'
             redirect to '/admin/users'
           end
           erb :'users/users'
