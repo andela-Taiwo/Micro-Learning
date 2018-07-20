@@ -36,20 +36,20 @@ RSpec.describe Sinatra::App:: TopicController do
         expect(last_response).to be_ok
         expect(last_response.body).to include('Successfully add a new topic')
       end
-      it 'edit the topic ' do
-        post '/admin/topic', params = { topic:
-                                            {
-                                                title: 'Introduction to JS',
-                                                description:  'The gentle introduction
-      to learning javascript'
-                                            }
+
+      it 'edit the topic description ' do
+        topic_description = 'The gentle introduction to learning javascript'
+        patch "/admin/topic/#{topic.id}/edit", params = { topic:
+                                                              {
+                                                                description: topic_description
+                                                               }
         }
         follow_redirect!
         expect(last_response).to be_ok
-        expect(last_response.body).to include('Successfully add a new topic')
+        expect(last_response.body).to include('Successfully updated the topic')
       end
 
-      it 'edit the topic title' do
+      it 'edit the resource title' do
         patch "/admin/topic/#{topic.id}/edit", params = { topic:
                                                               {
                                                                   title: 'update javascript title'

@@ -6,14 +6,16 @@ ENV['RACK_ENV'] ||= 'test'
 require 'simplecov'
 require 'simplecov-json'
 require 'simplecov-rcov'
-require 'simplecov-console'
 
-SimpleCov.formatters = [
+SimpleCov.formatter = [
     SimpleCov::Formatter::HTMLFormatter,
     SimpleCov::Formatter::JSONFormatter,
-    SimpleCov::Formatter::RcovFormatter
+    SimpleCov::Formatter::RcovFormatter,
+    Coveralls::SimpleCov::Formatter
 ]
+
 SimpleCov.start
+
 require 'rack/test'
 require 'rspec'
 require 'rspec-sidekiq'

@@ -76,40 +76,6 @@ jobs:
           paths:
             - coverage_results
 
-#    coverage:
-#      <<: *defaults
-#      steps:
-#        - attach_workspace:
-#            at: .
-#
-#        - restore_cache:
-#            key: v2-repo-{{ .Environment.CIRCLE_SHA1 }}
-#
-#        - restore_cache:
-#            keys:
-#              - gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-#              - gem-cache-{{ arch }}-{{ .Branch }}
-#              - gem-cache
-#
-#        - run: bundle install --path vendor/bundle
-#
-#        - run:
-#            name: Merge and check coverage
-#            command: |
-#              RUN_COVERAGE=true bundle exec rake simplecov:report_coverage
-#        - store_artifacts:
-#            path: ~/split_app/coverage
-#            destination: coverage
-#
-#workflows:
-#  version: 2
-#  build_and_test:
-#    jobs:
-#        - test
-#        - coverage:
-#            requires:
-#              - test
-
 notify:
   webhooks:
     - url: https://coveralls.io/webhook?repo_token=jtXkU4g6xAkBD6feVcI20oWmxWxMK6CY9

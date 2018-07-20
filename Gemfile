@@ -20,8 +20,9 @@ gem 'sidekiq-scheduler'
 gem 'sinatra'
 gem 'sinatra-flash', '~> 0.3.0'
 gem 'sinatra-assetpack'
-gem "warden", "1.2.1"
 gem 'redis'
+gem "warden", "1.2.1"
+
 
 group :development do
   gem 'shotgun'
@@ -32,9 +33,8 @@ group :test do
   gem "rspec_junit_formatter"
   gem 'database_cleaner'
   gem 'rspec-sidekiq'
+  gem 'simplecov', require: false
   gem "factory_bot", "~> 4.0", :require => false
   gem 'simplecov-json', :require => false
   gem 'simplecov-rcov', :require => false
-  gem 'simplecov-console', :require => false
-
 end

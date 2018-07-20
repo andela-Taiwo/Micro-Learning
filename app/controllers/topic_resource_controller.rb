@@ -12,23 +12,31 @@ module Sinatra
           check_authentication
           @resources = Resource.all
           @topic = Topic.find_by(id: params[:id])
-          @topic_resources = @topic.resources
+
           @title = 'Topic Resources'
-          erb :'resources/topic_resources'
+          if @topic
+            @topic_resources = @topic.resources unless @topic.nil? || @topic.resources.length == 0
+            erb :'resources/topic_resources'
+          else
+            flash[:error] = 'Topic does not exist'
+            redirect '/admin/topic'
+          end
+
         end
 
         app.delete '/admin/topic/:id/resource/:resource_id/delete' do
           check_admin_authentication
           @topic = Topic.find(params[:id])
           id = params[:id]
-          @topic_resources = @topic.resources
-          @resource = @topic.resources.find(params[:resource_id])
-          if @topic_resources.delete(@resource)
+          @topic_resources = @topic.resources unless @topic.nil?
+          @resource = @topic.resources.find_by(id: params[:resource_id]) unless @topic.resources.nil?
+          if @topic_resources && @resource
+            @topic_resources.destroy(@resource)
             flash[:success] = 'Successfully remove the resource.'
-            redirect '/admin/topic/' + id + '/resources'
+            redirect "/admin/topic/#{id}/resources"
           else
-            flash[:halt] = 'Unable to delete the topic'
-            redirect '/admin/topic/' + id + '/resources'
+            flash[:halt] = 'Unable to delete the resource'
+            redirect "/admin/topic/#{id}/resources"
           end
         end
 
@@ -36,7 +44,7 @@ module Sinatra
           check_admin_authentication
           @topic = Topic.find(params[:id])
           id = params[:id]
-          @topic_resources = @topic.resources
+          @topic_resources = @topic.resources unless @topic.nil?
           @resource = @topic.resources.find(params[:resource_id])
           if @resource
             erb :'resources/resource'
@@ -49,17 +57,15 @@ module Sinatra
         app.post '/admin/topic/:id/resources' do
           check_admin_authentication
           id = params[:id]
-          puts params
-          resource_id = params[:topic][:resource_ids]  if params.has_key?('topic')
-          resources = Resource.find(resource_id) unless resource_id.nil?
+          resource_ids = params[:topic][:resource_ids]  if params.has_key?('topic')
+          resources = Resource.find(resource_ids) unless resource_ids.nil?
           @topic = Topic.find_by(id: params[:id])
-          existing_resources = @topic.resources.find_by(id: resource_id)
+          existing_resources = @topic.resources.find_by(id: resource_ids)
 
           if existing_resources
             flash[:error] = "The resource #{existing_resources.title}already exist for the topic."
             redirect '/admin/topic/' + id + '/resources'
           elsif @topic && resources
-            puts resources
             @topic.resources <<  resources
             flash[:success] = 'Resource successfully added to the topic.'
             redirect '/admin/topic/' + id + '/resources'
