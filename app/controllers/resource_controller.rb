@@ -66,11 +66,13 @@ module Sinatra
         app.delete '/admin/resource/:id/delete' do
           check_admin_authentication
           @resource = Resource.find_by_id(params[:id])
-          if @resource.destroy
-              flash[:success] = 'Successfully deleted the resource'
-              redirect '/admin/resource'
+          if @resource
+            @resource.destroy
+            flash[:success] = 'Successfully deleted the resource'
+            redirect '/admin/resource'
           else
-              flash[:halt] = 'Unable to delete the resource'
+            flash[:halt] = 'Unable to delete the resource'
+            redirect '/admin/resource'
           end
 
         end

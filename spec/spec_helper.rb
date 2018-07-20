@@ -1,5 +1,21 @@
-ENV['RACK_ENV'] ||= 'test'
+
 require 'coveralls'
+Coveralls.wear!
+
+ENV['RACK_ENV'] ||= 'test'
+require 'simplecov'
+require 'simplecov-json'
+require 'simplecov-rcov'
+
+SimpleCov.formatter = [
+    SimpleCov::Formatter::HTMLFormatter,
+    SimpleCov::Formatter::JSONFormatter,
+    SimpleCov::Formatter::RcovFormatter,
+    Coveralls::SimpleCov::Formatter
+]
+
+SimpleCov.start
+
 require 'rack/test'
 require 'rspec'
 require 'rspec-sidekiq'

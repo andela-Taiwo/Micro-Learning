@@ -4,7 +4,7 @@
  This ensures that users can learn at their own pace.
 
 [![CircleCI](https://circleci.com/gh/andela-Taiwo/Micro-Learning/tree/develop.svg?style=svg)](https://circleci.com/gh/andela-Taiwo/Micro-Learning/tree/develop)
-[![Coverage Status](https://coveralls.io/repos/github/andela-Taiwo/Micro-Learning/badge.svg?branch=master)](https://coveralls.io/github/andela-Taiwo/Micro-Learning?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/andela-Taiwo/Micro-Learning/badge.svg?branch=develop)](https://coveralls.io/github/andela-Taiwo/Micro-Learning?branch=develop)
 # Features of 3L
 - Signup with username, email and password
 - Login with email and password
