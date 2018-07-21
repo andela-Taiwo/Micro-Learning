@@ -12,7 +12,6 @@ gem 'pony', '~> 1.6', '>= 1.6.1'
 gem 'sinatra-activerecord'
 gem 'rack-test'
 gem 'rake'
-gem  'rspec'
 gem 'rufus-scheduler'
 gem 'sass'
 gem 'sidekiq'
@@ -26,10 +25,12 @@ gem "warden", "1.2.1"
 
 group :development do
   gem 'shotgun'
+  gem 'rubocop'
 end
 
 group :test do
   gem 'sqlite3'
+  gem  'rspec'
   gem "rspec_junit_formatter"
   gem 'database_cleaner'
   gem 'rspec-sidekiq'
@@ -37,4 +38,5 @@ group :test do
   gem "factory_bot", "~> 4.0", :require => false
   gem 'simplecov-json', :require => false
   gem 'simplecov-rcov', :require => false
+  gem 'simplecov-console'
 end

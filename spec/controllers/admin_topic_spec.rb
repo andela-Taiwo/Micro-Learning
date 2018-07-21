@@ -4,8 +4,8 @@ RSpec.describe Sinatra::App:: TopicController do
   include Warden::Test::Helpers
 
   after { Warden.test_reset! }
-  let(:user) { build :user }
   let(:topic) {create :topic }
+
   describe 'Admin access topic' do
     before { login_as FactoryBot.create(:admin, username: 'testadmin2') }
     Warden.on_next_request do |proxy|
@@ -23,13 +23,7 @@ RSpec.describe Sinatra::App:: TopicController do
         expect(last_response.body).to include('Topics')
       end
       it 'add new the topic' do
-        post '/admin/topic', params = { topic:
-                                            {
-                                                title: 'Introduction to JS',
-                                                description:  'The gentle introduction
-      to learning javascript'
-                                            }
-        }
+        post '/admin/topic', params = {topic: attributes_for(:topic)}
         follow_redirect!
         expect(last_response).to be_ok
         expect(last_response.body).to include('Successfully add a new topic')
@@ -37,25 +31,22 @@ RSpec.describe Sinatra::App:: TopicController do
 
       it 'edit the topic description ' do
         topic_description = 'The gentle introduction to learning javascript'
-        patch "/admin/topic/#{topic.id}/edit", params = { topic:
-                                                              {
-                                                                description: topic_description
-                                                               }
-        }
+        patch "/admin/topic/#{topic.id}/edit",
+              params = attributes_for(:topic, description:topic_description)
         follow_redirect!
         expect(last_response).to be_ok
         expect(last_response.body).to include('Successfully updated the topic')
       end
 
       it 'edit the resource title' do
-        patch "/admin/topic/#{topic.id}/edit", params = { topic:
-                                                              {
-                                                                  title: 'update javascript title'
-                                                              }
-        }
+        patch "/admin/topic/#{topic.id}/edit",
+              params = attributes_for(:topic, title: " The new title ")
         follow_redirect!
         expect(last_response).to be_ok
         expect(last_response.body).to include('Successfully updated the topic')
+        expect(last_response.body).to include('The new title')
+
+
       end
 
       it 'delete the topic' do
@@ -68,40 +59,28 @@ RSpec.describe Sinatra::App:: TopicController do
 
     context 'with invalid data set' do
       it 'should not add new the topic when title is blank' do
-        post '/admin/topic', params = { topic:
-                                            {
-                                                title: '',
-                                                description:  'The gentle introduction
-      to learning javascript'
-                                            }
+        post '/admin/topic', params = {topic: attributes_for(:topic, title: ' ')
         }
         follow_redirect!
         expect(last_response).to be_ok
-        expect(last_response.body).to include('title    is too short (minimum is 6 characters')
+        expect(last_response.body).to include('title is too short (minimum is 6 characters')
       end
 
       it 'should not add new the topic when description is blank' do
-        post '/admin/topic', params = { topic:
-                                            {
-                                                title: 'The beginning of new course',
-                                                description: ' '
-                                            }
-        }
+        post '/admin/topic',  params = {topic: attributes_for(:topic, description: ' ')}
         follow_redirect!
         expect(last_response).to be_ok
         expect(last_response.body)
-            .to include('description    is too short (minimum is 10 characters)')
+            .to include('description is too short (minimum is 10 characters)')
       end
 
       it 'when blank title is provided, topic title should remain unchange ' do
-        patch "/admin/topic/#{topic.id}/edit", params = { topic:
-                                                              {
-                                                                  title: ''
-                                                              }
-        }
+        patch "/admin/topic/#{topic.id}/edit",  params = attributes_for(:topic, title: ' ')
         follow_redirect!
         expect(last_response).to be_ok
         expect(last_response.body).to include(topic.title)
+        expect(last_response.body).to include("title is too short (minimum is 6 characters)")
+
       end
 
       it 'can delete non existing topic ' do
@@ -111,10 +90,6 @@ RSpec.describe Sinatra::App:: TopicController do
         expect(last_response.body).to include('Unable to delete the topic')
       end
     end
-  end
-
-  describe 'user access the topic' do
-
   end
 
 end

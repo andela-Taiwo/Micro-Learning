@@ -47,16 +47,13 @@ RSpec.describe Sinatra::App:: TopicResourceController do
         follow_redirect!
         expect(last_response).to be_ok
         expect(last_response.body).to include("Successfully remove the resource.")
-        expect(last_request.url).to include("/admin/topic/#{topic.id}/")
+        expect(last_request.path).to eq("/admin/topic/#{topic.id}/resources")
         expect(last_response.body).to include(topic.title)
       end
 
       it 'add new resources to a topic' do
-        post "/admin/topic/#{topic.id}/resources", params = { topic:
-                                            {
-                                                resource_ids: ["#{rails.id}", "#{sinatra.id}"]
-                                            }
-        }
+        post "/admin/topic/#{topic.id}/resources",
+             params = {topic: attributes_for(:topic, resource_ids: ["#{rails.id}", "#{sinatra.id}"])}
         follow_redirect!
         expect(last_response).to be_ok
         expect(last_response.body).to include('Resource successfully added to the topic.')
@@ -68,16 +65,13 @@ RSpec.describe Sinatra::App:: TopicResourceController do
       context 'with invalid data set' do
         it 'admin can not adds the same resource twice for a topic ' do
           topics =  FactoryBot.create :topic, title: 'Testing resource', resources: [sinatra, rails]
-          post "/admin/topic/#{topics.id}/resources", params = { topic:
-                                                                    {
-                                                                        resource_ids: ["#{rails.id}", "#{sinatra.id}"]
-                                                                    }
-          }
+          post "/admin/topic/#{topics.id}/resources",
+               params = {topic: attributes_for(:topic, resource_ids: ["#{rails.id}", "#{sinatra.id}"])}
           follow_redirect!
           expect(last_response).to be_ok
           expect(last_response.body)
-              .to include("The resource #{sinatra.title}already exist for the topic.")
-          expect(last_request.url). to include ("/admin/topic/#{topics.id}/resources")
+              .to include("The resource #{sinatra.title} already exist for the topic.")
+          expect(last_request.path). to eq ("/admin/topic/#{topics.id}/resources")
         end
 
         it 'can not delete non existing resource ' do
@@ -85,7 +79,7 @@ RSpec.describe Sinatra::App:: TopicResourceController do
           follow_redirect!
           expect(last_response).to be_ok
           expect(last_response.body).to include("Unable to delete the resource")
-          expect(last_request.url).to include("/admin/topic/#{topic.id}/")
+          expect(last_request.path).to eq("/admin/topic/#{topic.id}/resources")
           expect(last_response.body).to include(topic.title)
         end
       end

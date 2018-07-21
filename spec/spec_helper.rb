@@ -1,8 +1,8 @@
-
+ENV['RACK_ENV'] ||= 'test'
 require 'coveralls'
 Coveralls.wear!
 
-ENV['RACK_ENV'] ||= 'test'
+
 require 'simplecov'
 require 'simplecov-json'
 require 'simplecov-rcov'

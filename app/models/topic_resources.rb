@@ -1,5 +1,5 @@
-require_relative 'resource'
-require_relative 'topic'
+require_relative "resource"
+require_relative "topic"
 
 class TopicResource < ActiveRecord::Base
   belongs_to :topic

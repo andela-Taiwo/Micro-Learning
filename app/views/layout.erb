@@ -51,7 +51,7 @@
     <% if type %>
       <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <%if flash[type].is_a? Hash %>
-          <%= flash[type].keys[0] %>    <%= flash[type].values[0].pop %>
+          <%= flash[type].keys[0] %> <%= flash[type].values[0].pop %>
 
         <% else %>
           <div data-alert class="flash <%= type %> alert-box radius">
@@ -69,7 +69,7 @@
 </div>
 <footer class="footer fixed-bottom  text-center">
   <div class="inner text-muted text-centre ">
-    <span>copyright@Memunat<%=  Time.new.year%></span>
+    <span>Copyright <strong>@Memunat<%=  Time.new.year%></strong></span>
   </div>
 </footer>
 
