@@ -7,15 +7,12 @@ RSpec.describe Sinatra::App:: AdminResourceController do
   let(:resource) { create :resource }
   describe "Admin  resources" do
     before { login_as FactoryBot.create(:admin, username: "testadmin12") }
-    def app
-      @app = App
-    end
+
     context "with valid credentials" do
 
       it "admin views resources" do
         get "/admin/resource"
         expect(last_response).to be_ok
-
         expect(last_response.body).to include("Resources")
       end
 
@@ -27,17 +24,16 @@ RSpec.describe Sinatra::App:: AdminResourceController do
       end
 
       it "edit the resource " do
-        patch "/admin/resource/#{resource.id}/edit",
+        patch "/admin/resource/#{resource.id}",
               params = attributes_for(:resource, title: "Introduction to Rails")
         follow_redirect!
         expect(last_response).to be_ok
         expect(last_response.body).to include("Successfully updated the resource")
         expect(last_response.body).to include("Introduction to Rails")
-
       end
 
       it "delete a resource " do
-        delete "/admin/resource/#{resource.id}/delete"
+        delete "/admin/resource/#{resource.id}"
         follow_redirect!
         expect(last_response).to be_ok
         expect(last_response.body).to include("Successfully deleted the resource")
@@ -63,7 +59,7 @@ RSpec.describe Sinatra::App:: AdminResourceController do
       end
 
       it "when blank title is provided, resource title should remain unchange " do
-        patch "/admin/resource/#{resource.id}/edit",
+        patch "/admin/resource/#{resource.id}",
               params = attributes_for(:resource, title: " ")
         follow_redirect!
         expect(last_response).to be_ok
@@ -72,12 +68,11 @@ RSpec.describe Sinatra::App:: AdminResourceController do
       end
 
       it "can delete non existing resource " do
-        delete "/admin/resource/#{5}/delete"
+        delete "/admin/resource/#{5}"
         follow_redirect!
         expect(last_response).to be_ok
         expect(last_response.body).to include("Unable to delete the resource")
       end
     end
   end
-
 end

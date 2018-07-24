@@ -3,15 +3,16 @@ RSpec.describe Sinatra::App:: LoginSession do
   include Rack::Test::Methods
   include Warden::Test::Helpers
   let(:user) { create :user }
-  let(:admin)  { build :admin }
-  after { Warden.test_reset! }
-  def app
-    @app = App
-  end
+
   describe 'Session Controller' do
-    before { login_as FactoryBot.create(:admin, username: "testadmin12") }
+
+    before do
+      FactoryBot.create(:user)
+      FactoryBot.create(:admin)
+    end
+
     it "logs in a user" do
-      post "/login", params = {user: attributes_for(:user)}
+      post "/login", email: "test007@example.com", password: 'test1234'
       follow_redirect!
       expect(last_response).to be_ok
       expect(last_response.body)
@@ -21,7 +22,7 @@ RSpec.describe Sinatra::App:: LoginSession do
     end
 
     it "logs in a admin" do
-      post "/login", params = {admin: attributes_for(:user)}
+      post "/login", email: "testadmin@example.com", password: 'test1234'
       follow_redirect!
       expect(last_response).to be_ok
       expect(last_response.body)
@@ -31,7 +32,7 @@ RSpec.describe Sinatra::App:: LoginSession do
     end
 
     describe 'logout a user ' do
-      before { login_as FactoryBot.create(:admin) }
+      before { login_as FactoryBot.create(:admin, username: "admin21") }
       it "logs out user" do
 
         get "/logout"
@@ -41,6 +42,5 @@ RSpec.describe Sinatra::App:: LoginSession do
             .to include("Signup")
       end
     end
-
   end
 end

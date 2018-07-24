@@ -1,6 +1,7 @@
 require "sidekiq"
 require "erb"
 require "tilt/erb"
+require_relative "../../app/helpers/ponymail"
 
 class MailWorker
   include Sidekiq::Worker
@@ -22,21 +23,6 @@ class MailWorker
              File.expand_path("../views/enrollment_message.erb", File.dirname(__FILE__))
            end
     file = ERB.new(File.read(path)).result(binding)
-    Pony.options = {
-      subject:     "Resource Notification",
-      via:         :smtp,
-      headers:     {"Content-Type" => "text/html"},
-      body:        file,
-      via_options: {
-        address:              "smtp.gmail.com",
-        port:                 "587",
-        enable_starttls_auto: true,
-        user_name:            ENV["EMAIL"],
-        password:             ENV["EMAIL_PASS"],
-        authentication:       :plain, # :plain, :login, :cram_md5, no auth by default
-        domain:               "localhost.localdomain"
-      }
-    }
-    Pony.mail(to: recipient)
+    mailer("Resource Notification", recipient, file)
   end
 end

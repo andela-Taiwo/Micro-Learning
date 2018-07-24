@@ -5,6 +5,7 @@ module Sinatra
   module App
     module UserTopicController
       def self.registered(app)
+
         app.before do
           url = request.path_info
           check_authentication unless (url == "/login" ||
@@ -18,13 +19,11 @@ module Sinatra
         end
 
         app.get "/topics" do
-          # check_authentication
           @topics = Topic.order("updated_at  DESC, id  DESC ")
           erb :'topics/topics'
         end
 
         app.get "/topic/:id" do
-          # check_authentication
           @topic = Topic.find_by(id: params[:id])
           if @topic
             erb :'topics/topic_detail'
@@ -38,10 +37,12 @@ module Sinatra
           @topic = Topic.find(params[:id])
           @user = current_user
           existing_topic = @user.topics.find_by(id: params[:id])
+
           unless existing_topic.nil?
             flash[:warning] = "You have already added the topic."
             redirect "/topics"
           end
+
           @user_topics = @user.topics << @topic if @topic && @user
           if @user_topics.nil?
             error = @user_topics.errors.messages
@@ -58,7 +59,8 @@ module Sinatra
             end
           end
         end
-        app.delete "/user/topic/:id/delete" do
+
+        app.delete "/user/topic/:id" do
           @user = current_user
           @user_topics = current_user.topics
           @topic = @user_topics.find(params[:id])

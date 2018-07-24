@@ -8,5 +8,6 @@ FactoryBot.define do
   factory :admin, parent: :user do
     email 'testadmin@example.com'
     admin  true
+    username "crazylove"
   end
 end

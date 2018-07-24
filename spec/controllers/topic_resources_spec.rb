@@ -20,9 +20,6 @@ RSpec.describe Sinatra::App:: TopicResourceController do
   end
   describe 'Admin access resource' do
     before { login_as FactoryBot.create(:admin, username: 'testadmin3') }
-    def app
-      @app = App
-    end
 
     context 'with valid credentials' do
       it 'admin views topics resources' do
@@ -43,7 +40,7 @@ RSpec.describe Sinatra::App:: TopicResourceController do
       end
 
       it 'admin delete single resource' do
-        delete "/admin/topic/#{topic.id}/resource/#{resource.id}/delete"
+        delete "/admin/topic/#{topic.id}/resource/#{resource.id}"
         follow_redirect!
         expect(last_response).to be_ok
         expect(last_response.body).to include("Successfully remove the resource.")
@@ -75,7 +72,7 @@ RSpec.describe Sinatra::App:: TopicResourceController do
         end
 
         it 'can not delete non existing resource ' do
-          delete "/admin/topic/#{topic.id}/resource/#{45}/delete"
+          delete "/admin/topic/#{topic.id}/resource/#{45}"
           follow_redirect!
           expect(last_response).to be_ok
           expect(last_response.body).to include("Unable to delete the resource")
@@ -83,8 +80,6 @@ RSpec.describe Sinatra::App:: TopicResourceController do
           expect(last_response.body).to include(topic.title)
         end
       end
-
     end
   end
-
 end

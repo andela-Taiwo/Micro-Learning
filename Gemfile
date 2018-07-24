@@ -24,19 +24,19 @@ gem "warden", "1.2.1"
 
 
 group :development do
-  gem 'shotgun'
   gem 'rubocop'
+  gem 'shotgun'
 end
 
 group :test do
-  gem 'sqlite3'
+  gem 'database_cleaner'
+  gem "factory_bot", "~> 4.0", :require => false
   gem  'rspec'
   gem "rspec_junit_formatter"
-  gem 'database_cleaner'
   gem 'rspec-sidekiq'
   gem 'simplecov', require: false
-  gem "factory_bot", "~> 4.0", :require => false
+  gem 'simplecov-console'
   gem 'simplecov-json', :require => false
   gem 'simplecov-rcov', :require => false
-  gem 'simplecov-console'
+  gem 'sqlite3'
 end

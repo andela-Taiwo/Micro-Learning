@@ -1,5 +1,5 @@
 <% if @resource %>
-  <form method="post" action="/admin/resource/<%=@resource.id %>/edit" class="sm">
+  <form method="post" action="/admin/resource/<%=@resource.id %>" class="sm">
     <div class="form-group sm">
       <label for="exampleFormControlInput1">Title</label>
       <input type="text" class="form-control" id="topicTitle" placeholder="Title" name="title" value="<%= @resource.title %>">

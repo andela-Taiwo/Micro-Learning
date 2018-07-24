@@ -11,6 +11,7 @@ module Sinatra
         app.before do
           check_admin_authentication if request.path_info == "/admin/"
         end
+
         app.get "/resources" do
           @resources = Resource.order("created_at DESC")
           erb :'resources/resources'
@@ -24,7 +25,7 @@ module Sinatra
             error = @resource.errors.messages
             flash[:error] = error
           end
-          redirect '/admin/resource'
+          redirect "/admin/resource"
         end
 
         app.get "/admin/resource" do
@@ -38,13 +39,12 @@ module Sinatra
           erb :'resources/edit_resource_form' if @resource
         end
 
-        app.patch "/admin/resource/:id/edit" do
+        app.patch "/admin/resource/:id" do
           @resource = Resource.find_by_id(params[:id])
           if @resource
             erb :'resources/edit_resource_form'
-            @resource.title = params[:title].strip if params.has_key?("title")
-            @resource.description = params[:description].strip if params.has_key?("description")
-            @resource.url = params[:url].strip if params.has_key?("url")
+            data = clean_data(params)
+            @resource.update_attributes(data)
             if @resource.save
               flash[:success] = "Successfully updated the resource"
             else
@@ -55,7 +55,7 @@ module Sinatra
           end
         end
 
-        app.delete "/admin/resource/:id/delete" do
+        app.delete "/admin/resource/:id" do
           @resource = Resource.find_by_id(params[:id])
           if @resource
             @resource.destroy

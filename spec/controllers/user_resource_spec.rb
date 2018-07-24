@@ -14,10 +14,6 @@ RSpec.describe Sinatra::App:: UserResourceController do
   describe "User resource" do
     before { login_as FactoryBot.create(:user, topics: [topic]) }
 
-    def app
-      @app = App
-    end
-
     context "with valid credentials" do
       it "user can view topic's resource" do
         get "/user/topics/#{topic.id}/resource"
@@ -26,6 +22,7 @@ RSpec.describe Sinatra::App:: UserResourceController do
         expect(last_response.body).to include(resource.url.to_s)
       end
     end
+
     context "with invalid data set" do
       it "user can not view non existing topic's resource " do
         get "/user/topics/1000/resource"

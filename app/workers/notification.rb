@@ -1,11 +1,12 @@
 require "sidekiq"
 require "sidekiq-scheduler"
-
+require_relative "../../app/helpers/ponymail"
 Sidekiq.configure_server do |config|
   config.on(:startup) do
     config.redis = {size: 27}
     Sidekiq.schedule = YAML.load_file(File.expand_path("../config/sidekiq.yml", __dir__))
     SidekiqScheduler::Scheduler.instance.reload_schedule!
+    Sidekiq::Extensions.enable_delay!
   end
 end
 
@@ -23,7 +24,7 @@ class ResourceNotification
       resources = topic[0].resources
       resource = resources.sample(1)
       username = user.username
-      $redis.lpush(msg, activate_email(user.email, resource[0].url, topic[0].title, username)) if resource[0]
+      puts $redis.lpush(msg, activate_email(user.email, resource[0].url, topic[0].title, username)) if resource[0]
     end
   end
 
@@ -36,22 +37,6 @@ class ResourceNotification
                             File.dirname(__FILE__))
 
     file = ERB.new(File.read(path)).result(binding)
-
-    Pony.options = {
-      subject:     "Daily Resource Notification",
-      headers:     {"Content-Type" => "text/html"},
-      via:         :smtp,
-      body:        file,
-      via_options: {
-        address:              "smtp.gmail.com",
-        port:                 "587",
-        enable_starttls_auto: true,
-        user_name:            ENV["EMAIL"],
-        password:             ENV["EMAIL_PASS"],
-        authentication:       :plain, # :plain, :login, :cram_md5, no auth by default
-        domain:               "localhost.localdomain"
-      }
-    }
-    Pony.mail(to: recipient)
+    mailer("Daily Resource Notification", recipient, file)
   end
 end

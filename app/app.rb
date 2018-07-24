@@ -4,6 +4,7 @@ require "sinatra/activerecord"
 require "erb"
 require "warden"
 require_relative "helpers/auth_helper"
+require_relative "helpers/data_helper"
 require "sinatra/assetpack"
 require "sass"
 require "sidekiq"
@@ -40,6 +41,7 @@ class App < Sinatra::Base
   register Sinatra::AssetPack
   register Sinatra::Flash
   helpers Sinatra::App::Helpers
+  helpers Sinatra::App::DataHelper
   register Sinatra::App::Home
   register Sinatra::App::LoginSession
   register Sinatra::App::SignUp
@@ -98,22 +100,15 @@ class App < Sinatra::Base
     File.read(File.join("public", "#{view}.html"))
   end
 
+  before { check_admin_authentication if request.path_info == "/test/" }
+
   get "/test" do
-    check_admin_authentication
-    stats = Sidekiq::Stats.new
-    workers = Sidekiq::Workers.new
-    "
-		<p>Processed: #{stats.processed}</p>
-		<p>In Progress: #{workers.size}</p>
-		<p>Enqueued: #{stats.enqueued}</p>
-		<p><a href='/test'>Refresh</a></p>
-		<p><a href='/test/add_job'>Add Job</a></p>
-		<p><a href='/sidekiq'>Dashboard</a></p>
-		"
+    @stats = Sidekiq::Stats.new
+    @workers = Sidekiq::Workers.new
+    erb :"users/sidekiq"
   end
 
   get "/test/add_job" do
-    check_admin_authentication
     "
 		<p>Added Job: #{ResourceNotification.set(queue: :default).perform_async}</p>
 		<p><a href='/'>Back</a></p>

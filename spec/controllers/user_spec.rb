@@ -4,9 +4,6 @@ RSpec.describe Sinatra::App:: SignUp do
   include Warden::Test::Helpers
   let(:user) { build :user }
   let(:admin)  { build :admin }
-  def app
-    @app = App
-  end
 
   context "with valid credentials" do
     it "register a user, and send email" do
@@ -19,14 +16,6 @@ RSpec.describe Sinatra::App:: SignUp do
   end
 
   context "with invalid credential" do
-    it "with non-matching password confirmation" do
-      post "/signup", params = {user: attributes_for(:user, password: "$hsdnd$H ",
-                                                      password_confirmation: "password")
-      }
-      expect(last_response.body).to eq ""
-
-      expect(last_response.status).to eq 302
-    end
 
     it "with a blank email" do
       post "/signup", params = {user: attributes_for(:user, email: " ")}
@@ -37,26 +26,21 @@ RSpec.describe Sinatra::App:: SignUp do
     end
 
     it "with short password length" do
-      post "/signup",params = {user: attributes_for(:user, password: "abc",
-                                                    password_confirmation: "abc")
-      }
+      post "/signup", params = {user: attributes_for(:user, password:              "abc",
+                                                            password_confirmation: "abc")}
       follow_redirect!
       expect(last_response).to be_ok
       expect(last_response.body)
         .to include("password is too short (minimum is 6 characters)")
-
     end
 
     it "with an already registered username" do
-      user = FactoryBot.create(:user)
-      post "/signup", params = {user: attributes_for(:user)
-      }
+      FactoryBot.create(:user)
+      post "/signup", params = {user: attributes_for(:user)}
       follow_redirect!
       expect(last_response).to be_ok
       expect(last_response.body).to include("Login")
       expect(last_response.body).to include("username has already been taken")
-
     end
-
   end
 end

@@ -14,13 +14,13 @@ RSpec.describe Sinatra::App:: TopicController do
   let(:user) { FactoryBot.build :user, topics: [topic] }
 
   let(:admin)  { build :admin }
-  before { FactoryBot.build_stubbed :topic, title: "Testing topic", description: "The long description on ruby" }
+  before {
+    FactoryBot.build_stubbed :topic,
+                             title:       "Testing topic",
+                             description: "The long description on ruby"
+  }
 
   before { login_as FactoryBot.create(:user, topics: [topic]) }
-
-  def app
-    @app = App
-  end
 
   context "with valid credentials" do
     it "user views topics" do
@@ -56,7 +56,7 @@ RSpec.describe Sinatra::App:: TopicController do
     end
 
     it "user un-follows  a topic " do
-      delete "/user/topic/#{topic.id}/delete"
+      delete "/user/topic/#{topic.id}"
       follow_redirect!
       expect(last_response).to be_ok
       expect(last_response.body).to include("Successfully deleted the topic")

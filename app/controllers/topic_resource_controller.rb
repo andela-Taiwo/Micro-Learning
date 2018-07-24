@@ -25,7 +25,7 @@ module Sinatra
           end
         end
 
-        app.delete "/admin/topic/:id/resource/:resource_id/delete" do
+        app.delete "/admin/topic/:id/resource/:resource_id" do
           @topic = Topic.find(params[:id])
           id = params[:id]
           @topic_resources = @topic.resources unless @topic.nil?
@@ -33,11 +33,10 @@ module Sinatra
           if @topic_resources && @resource
             @topic_resources.destroy(@resource)
             flash[:success] = "Successfully remove the resource."
-            redirect "/admin/topic/#{id}/resources"
           else
             flash[:halt] = "Unable to delete the resource"
-            redirect "/admin/topic/#{id}/resources"
           end
+          redirect "/admin/topic/#{id}/resources"
         end
 
         app.get "/admin/topic/:id/resource/:resource_id" do
@@ -62,15 +61,13 @@ module Sinatra
 
           if existing_resources
             flash[:error] = "The resource #{existing_resources.title} already exist for the topic."
-            redirect "/admin/topic/" + id + "/resources"
           elsif @topic && resources
             @topic.resources << resources
             flash[:success] = "Resource successfully added to the topic."
-            redirect "/admin/topic/" + id + "/resources"
           else
             flash[:error] = "Resource or the topic is not available"
-            redirect "/admin/topic/" + id + "/resources"
           end
+          redirect "/admin/topic/" + id + "/resources"
         end
       end
     end
