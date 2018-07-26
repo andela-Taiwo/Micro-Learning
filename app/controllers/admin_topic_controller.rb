@@ -6,8 +6,8 @@ module Sinatra
   module App
     module TopicController
       def self.registered(app)
-        app.before do
-          check_admin_authentication if request.path_info == "/admin/"
+        app.before "/admin/*" do
+          check_admin_authentication
         end
 
         app.post "/admin/topic" do
@@ -28,17 +28,15 @@ module Sinatra
         end
 
         app.get "/admin/topic/:id" do
-          @topic = Topic.find_by_id(params[:id])
+          @topic = Topic.find_by(id: params[:id])
           erb :'topics/edit_topic_form' if @topic
         end
-        # app.before do
-        #   @topic = Topic.find_by_id(params[:id])
-        # end
+
         app.patch "/admin/topic/:id" do
-          @topic = Topic.find_by_id(params[:id])
+          @topic = Topic.find_by(id: params[:id])
           if @topic
             data = clean_data(params)
-            @topic.update_attributes(data)
+            @topic.update(data)
             if @topic.save
               flash[:success] = "Successfully updated the topic"
             else
@@ -49,7 +47,7 @@ module Sinatra
         end
 
         app.delete "/admin/topic/:id" do
-          @topic = Topic.find_by_id(params[:id])
+          @topic = Topic.find_by(id: params[:id])
           if @topic
             @topic.destroy
             flash[:success] = "Successfully deleted the topic"

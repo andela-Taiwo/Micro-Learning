@@ -5,7 +5,7 @@ require_relative "../../app/helpers/ponymail"
 
 class MailWorker
   include Sidekiq::Worker
-  def perform(msg="send resource", recipient, user, topic)
+  def perform(msg = "send resource", recipient, user, topic)
     $redis.lpush(msg, activate_email(recipient, user, topic))
   end
 

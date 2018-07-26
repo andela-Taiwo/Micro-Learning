@@ -3,7 +3,7 @@ require "sidekiq-scheduler"
 require_relative "../../app/helpers/ponymail"
 Sidekiq.configure_server do |config|
   config.on(:startup) do
-    config.redis = {size: 27}
+    config.redis = { size: 27 }
     Sidekiq.schedule = YAML.load_file(File.expand_path("../config/sidekiq.yml", __dir__))
     SidekiqScheduler::Scheduler.instance.reload_schedule!
     Sidekiq::Extensions.enable_delay!
@@ -14,7 +14,7 @@ class ResourceNotification
   include Sidekiq::Worker
   uri = URI.parse(ENV["REDISCLOUD_URL"] || "redis://localhost:6379/")
   $redis = Redis.new(host: uri.host, port: uri.port, password: uri.password)
-  def perform(msg="send resource notification to registered user")
+  def perform(msg = "send resource notification to registered user")
     users = User.all
     puts "Load all users"
     users.each do |user|

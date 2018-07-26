@@ -8,8 +8,8 @@ module Sinatra
     module AdminResourceController
       # @param [Object] app
       def self.registered(app)
-        app.before do
-          check_admin_authentication if request.path_info == "/admin/"
+        app.before "/admin/*" do
+          check_admin_authentication
         end
 
         app.get "/resources" do
@@ -35,16 +35,16 @@ module Sinatra
         end
 
         app.get "/admin/resource/:id" do
-          @resource = Resource.find_by_id(params[:id])
+          @resource = Resource.find_by(id: params[:id])
           erb :'resources/edit_resource_form' if @resource
         end
 
         app.patch "/admin/resource/:id" do
-          @resource = Resource.find_by_id(params[:id])
+          @resource = Resource.find_by(id: params[:id])
           if @resource
             erb :'resources/edit_resource_form'
             data = clean_data(params)
-            @resource.update_attributes(data)
+            @resource.update(data)
             if @resource.save
               flash[:success] = "Successfully updated the resource"
             else
@@ -56,7 +56,7 @@ module Sinatra
         end
 
         app.delete "/admin/resource/:id" do
-          @resource = Resource.find_by_id(params[:id])
+          @resource = Resource.find_by(id: params[:id])
           if @resource
             @resource.destroy
             flash[:success] = "Successfully deleted the resource"

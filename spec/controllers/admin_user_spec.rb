@@ -1,4 +1,3 @@
-
 RSpec.describe Sinatra::App:: SignUp do
   include Rack::Test::Methods
   include Warden::Test::Helpers
@@ -9,7 +8,6 @@ RSpec.describe Sinatra::App:: SignUp do
     before { login_as FactoryBot.create(:admin, username: "testadmin5", email: "testadmin@.com") }
 
     context "with valid credentials" do
-
       it "can view admin dashboard" do
         get "/admin"
         expect(last_response).to be_ok
@@ -32,10 +30,10 @@ RSpec.describe Sinatra::App:: SignUp do
 
       it "can change user admin status" do
         user2 = FactoryBot.create(:user, username: "testname", email: "e@example.om")
-        patch "/admin/user/#{user2.id}", params = { admin: true }
+        patch "/admin/user/#{user2.id}", admin: true
         follow_redirect!
         expect(last_response).to be_ok
-        user2_new  = User.find_by(email: user2.email)
+        user2_new = User.find_by(email: user2.email)
         expect(last_response.body).to include(admin.username)
         expect(last_response.body).to include(admin.email)
         expect(last_response.body).to include(user2.username)
@@ -45,7 +43,7 @@ RSpec.describe Sinatra::App:: SignUp do
 
       it "can delete user" do
         user2 = FactoryBot.create(:user, username: "testname", email: "e@example.om")
-        delete "/admin/user/#{user2.id}/delete"
+        delete "/admin/user/#{user2.id}"
         follow_redirect!
         expect(last_response).to be_ok
         user2_new = User.find_by(email: user2.email)
@@ -56,13 +54,11 @@ RSpec.describe Sinatra::App:: SignUp do
     end
 
     context "with invalid parameters" do
-
       it "can change non existing user admin status" do
         user2 = FactoryBot.create(:user, username: "testname", email: "e@example.om")
-        patch "/admin/user/20", params = {admin: true}
+        patch "/admin/user/20", admin: true
         follow_redirect!
         expect(last_response).to be_ok
-        user2_new = User.find_by(email: user2.email)
         expect(last_response.body).to include(admin.username)
         expect(last_response.body).to include("User does not exist.")
         expect(last_response.body).to include(admin.email)
@@ -72,7 +68,7 @@ RSpec.describe Sinatra::App:: SignUp do
 
       it "can not delete non existing  user" do
         user2 = FactoryBot.create(:user, username: "testname", email: "e@example.om")
-        delete "/admin/user/#{64}/delete"
+        delete "/admin/user/64"
         follow_redirect!
         expect(last_response).to be_ok
         expect(last_response.body).to include(admin.username)

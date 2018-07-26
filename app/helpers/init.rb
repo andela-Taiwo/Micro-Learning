@@ -1,1 +1,1 @@
-require_relative 'auth_helper'
+require_relative "auth_helper"

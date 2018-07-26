@@ -14,7 +14,7 @@ module Sinatra
         end
 
         app.post "/login" do
-          if warden_handler.authenticated?(:admin)
+          if warden_handler.authenticate(:admin)
             redirect "/admin", flash[:success] = "Successfully logged in"
           elsif warden_handler.authenticate!
             redirect "/topics", flash[:success] = "Successfully logged in"

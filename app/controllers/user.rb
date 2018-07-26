@@ -23,7 +23,7 @@ module  Sinatra
           if @user.save
             warden_handler.set_user(@user)
             if current_user.email
-              MailWorker.perform_at(1.minutes,
+              MailWorker.perform_at(1.minute,
                                     current_user.email,
                                     current_user.username, nil)
             end

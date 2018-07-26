@@ -5,7 +5,6 @@ module Sinatra
   module App
     module UserTopicController
       def self.registered(app)
-
         app.before do
           url = request.path_info
           check_authentication unless (url == "/login" ||
@@ -53,7 +52,7 @@ module Sinatra
             @resources = @resources.sample(1)
             if current_user.email
               message = "Successfully add a new topic to your learning path"
-              MailWorker.perform_at(1.minutes, current_user.email, current_user.username, @topic.title)
+              MailWorker.perform_at(1.minute, current_user.email, current_user.username, @topic.title)
               flash[:success] = message
               redirect "/dashboard"
             end

@@ -2,13 +2,17 @@ module Sinatra
   module App
     module DashboardController
       def self.registered(app)
-        app.before { check_admin_authentication if request.path_info == "/admin/" }
+        app.before "/admin/*" do
+          check_admin_authentication
+        end
+
         app.get "/admin" do
           @topics = Topic.count
           @resources = Resource.count
           @users = User.count
           erb :'users/admin'
         end
+
         app.get "/admin/users" do
           @users = User.order(" created_at DESC, updated_at  ASC ")
           erb :'users/users'
@@ -20,8 +24,8 @@ module Sinatra
         end
 
         app.patch "/admin/user/:id" do
-          @user = User.find_by_id(params[:id])
-          if @user && params.has_key?("admin") && @user.update_column(:admin, params[:admin])
+          @user = User.find_by(id: params[:id])
+          if @user && params.key?("admin") && @user.update_column(:admin, params[:admin])
             flash[:success] = "Successfully updated #{@user.username} role"
             redirect "admin/users"
           else
@@ -31,7 +35,7 @@ module Sinatra
           erb :'users/users'
         end
 
-        app.delete "/admin/user/:id/delete" do
+        app.delete "/admin/user/:id" do
           @user = User.find_by(id: params[:id])
           users = User.order("created_at DESC, updated_at  ASC")
           if @user

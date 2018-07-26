@@ -2,7 +2,6 @@ ENV["RACK_ENV"] ||= "test"
 require "coveralls"
 Coveralls.wear!
 
-
 require "simplecov"
 require "simplecov-json"
 require "simplecov-rcov"
@@ -19,7 +18,7 @@ require "sidekiq/testing"
 require "factory_bot"
 require_relative "./helpers/controller_helper"
 
-require File.expand_path "../../app/app.rb", __FILE__
+require File.expand_path "../app/app.rb", __dir__
 
 module RSpecMixin
   include Rack::Test::Methods
@@ -51,7 +50,7 @@ RSpec.configure do |config|
   config.before(:suite) do
     FactoryBot.find_definitions
   end
-  config.expect_with(:rspec) {|c| c.syntax = [:should, :expect] }
+  config.expect_with(:rspec) { |c| c.syntax = %i(should expect) }
 
   config.mock_with :rspec do |mocks|
     mocks.verify_partial_doubles = true

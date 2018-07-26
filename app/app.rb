@@ -17,12 +17,12 @@ require_relative "workers/notification.rb"
 Sidekiq::Scheduler.dynamic = true
 
 Dir[File.join(File.dirname(__FILE__),
-              "controllers", "*.rb")].each {|lib| require_relative lib }
+              "controllers", "*.rb")].each { |lib| require_relative lib }
 Dir[File.join(File.dirname(__FILE__),
-              "workers", "*.rb")].each {|file| load file }
+              "workers", "*.rb")].each { |file| load file }
 
 Sidekiq.configure_client do |config|
-  config.redis = {size: 1}
+  config.redis = { size: 1 }
 end
 
 class App < Sinatra::Base
@@ -56,7 +56,7 @@ class App < Sinatra::Base
     manager.default_strategies :password
     manager.failure_app = App
     manager.serialize_into_session(&:id)
-    manager.serialize_from_session {|id| User.find(id) }
+    manager.serialize_from_session { |id| User.find(id) }
   end
 
   Warden::Manager.before_failure do |env, _opts|
@@ -68,11 +68,11 @@ class App < Sinatra::Base
     end
 
     def authenticate!
-      user = User.find_by_email(params["email"])
+      user = User.find_by(email: params["email"])
       if user && user.authenticate(params["password"])
         success! user
       else
-        raise "Invalid email or password"
+        fail "Invalid email or password"
       end
     end
   end
@@ -83,11 +83,11 @@ class App < Sinatra::Base
     end
 
     def authenticate!
-      user = User.find_by_email(params["email"])
+      user = User.find_by(email: params["email"])
       if user && user.admin
         success! user
       else
-        raise "Invalid email or password"
+        fail "Invalid email or password"
       end
     end
   end

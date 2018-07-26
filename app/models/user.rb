@@ -11,12 +11,12 @@ class User < ActiveRecord::Base
   validates :email, presence: true
   validates :username, length: {
     minimum: 4,
-    maximum: 35
+    maximum: 35,
   }, uniqueness: true
   validates :password, format: {
     with:    /\A[a-zA-Z0-9!@#\$%^&\(\)]+\z/,
-    message: "only allows a-z, 0-9 and !@#$%^&*()"
-  }, length: {minimum: 6, maximum: 35}
+    message: "only allows a-z, 0-9 and !@#$%^&*()",
+  }, length: { minimum: 6, maximum: 35 }
 
   private
 

@@ -5,20 +5,22 @@ RSpec.describe Sinatra::App:: TopicController do
   include Rack::Test::Methods
   include Warden::Test::Helpers
   after { Warden.test_reset! }
+
   let(:topic) { FactoryBot.create :topic }
-  let(:topic2) {
+  let(:topic2) do
     FactoryBot.create :topic,
                       title: "Testing topic", description: "The long description on ruby"
-  }
+  end
 
   let(:user) { FactoryBot.build :user, topics: [topic] }
 
   let(:admin)  { build :admin }
-  before {
+
+  before do
     FactoryBot.build_stubbed :topic,
                              title:       "Testing topic",
                              description: "The long description on ruby"
-  }
+  end
 
   before { login_as FactoryBot.create(:user, topics: [topic]) }
 
@@ -48,8 +50,8 @@ RSpec.describe Sinatra::App:: TopicController do
       follow_redirect!
       MailWorker.perform_at time, args
       expect(last_response).to be_ok
-      expect(last_response.body)
-        .to include("Successfully add a new topic to your learning path")
+      expect(last_response.body).
+        to include("Successfully add a new topic to your learning path")
       expect(last_response.body).to include("Enrolled Courses")
       expect(last_response.body).to include(user.username.capitalize)
       expect(MailWorker).to have_enqueued_sidekiq_job(args).at(time)
@@ -61,8 +63,8 @@ RSpec.describe Sinatra::App:: TopicController do
       expect(last_response).to be_ok
       expect(last_response.body).to include("Successfully deleted the topic")
       expect(last_response.body).to include("Enrolled Courses")
-      expect(last_response.body)
-        .to include(user.username.capitalize)
+      expect(last_response.body).
+        to include(user.username.capitalize)
     end
   end
 
@@ -72,9 +74,9 @@ RSpec.describe Sinatra::App:: TopicController do
       post "/user/topics/#{topic2.id}"
       follow_redirect!
       expect(last_response).to be_ok
-      expect(last_response.body)
-        .to include("You have already added the topic.")
-      expect(last_request.url). to include ("/topics")
+      expect(last_response.body).
+        to include("You have already added the topic.")
+      expect(last_request.url). to include "/topics"
     end
   end
 end

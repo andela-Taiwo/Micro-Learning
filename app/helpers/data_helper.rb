@@ -3,20 +3,20 @@ module Sinatra
     module DataHelper
       private
 
-      def clean_data(title=nil, url=nil, description=nil, params)
-        title = params[:title].strip if params.has_key?("title")
-        description= params[:description].strip if params.has_key?("description")
-        url = params[:url].strip if params.has_key?("url")
+      def clean_data(title = nil, url = nil, description = nil, params)
+        title = params[:title].strip if params.key?("title")
+        description = params[:description].strip if params.key?("description")
+        url = params[:url].strip if params.key?("url")
 
-        parameters = url.nil? ?
+        url.nil? ?
                          {
-                             title: title,
-                             description: description,
+                           title:       title,
+                           description: description,
                          } :
                          {
-                             title: title,
-                             description: description,
-                             url: url
+                           title:       title,
+                           description: description,
+                           url:         url,
                          }
       end
     end

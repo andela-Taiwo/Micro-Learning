@@ -7,8 +7,8 @@ module Sinatra
   module App
     module TopicResourceController
       def self.registered(app)
-        app.before do
-          check_admin_authentication if request.path_info == "/admin/"
+        app.before "/admin/*" do
+          check_admin_authentication
         end
 
         app.get "/admin/topic/:id/resources" do
@@ -54,7 +54,7 @@ module Sinatra
 
         app.post "/admin/topic/:id/resources" do
           id = params[:id]
-          resource_ids = params[:topic][:resource_ids] if params.has_key?("topic")
+          resource_ids = params[:topic][:resource_ids] if params.key?("topic")
           resources = Resource.find(resource_ids) unless resource_ids.nil?
           @topic = Topic.find_by(id: params[:id])
           existing_resources = @topic.resources.find_by(id: resource_ids)

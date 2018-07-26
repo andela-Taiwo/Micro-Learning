@@ -5,10 +5,10 @@ RSpec.describe Sinatra::App:: UserResourceController do
   include Warden::Test::Helpers
   after { Warden.test_reset! }
 
-  let(:resource) {
+  let(:resource) do
     FactoryBot.create(:resource, title: "The Winds of Winter",
                                  url:   "http://odinproject.com/beginner")
-  }
+  end
   let(:topic) { FactoryBot.build :topic, resources: [resource] }
 
   describe "User resource" do
