@@ -9,6 +9,7 @@ module Sinatra
         end
 
         app.get "/login" do
+          warden_handler.logout unless current_user.nil?
           @title = "Login Form"
           erb :'users/login'
         end

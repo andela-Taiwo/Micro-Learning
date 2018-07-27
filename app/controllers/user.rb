@@ -13,13 +13,13 @@ module  Sinatra
         end
 
         app.get "/signup" do
+          warden_handler.logout unless current_user.nil?
           @title = "SignUp Form"
           erb :'users/signup'
         end
 
         app.post "/signup" do
           @user = User.new(params[:user])
-          @errors = {}
           if @user.save
             warden_handler.set_user(@user)
             if current_user.email
