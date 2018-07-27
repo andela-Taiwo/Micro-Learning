@@ -49,7 +49,7 @@
 
   <% flash.keys.each do |type| %>
     <% if type %>
-      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <div class="alert alert-<%= type %> alert-dismissible fade show" role="alert">
         <%if flash[type].is_a? Hash %>
           <%= flash[type].keys[0] %> <%= flash[type].values[0].pop %>
 

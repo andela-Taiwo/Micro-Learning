@@ -20,7 +20,7 @@ module Sinatra
           elsif warden_handler.authenticate!
             redirect "/topics", flash[:success] = "Successfully logged in"
           else
-            redirect "/login", flash[:error] = "Incorrect email or password"
+            redirect "/login", flash[:error] = "Incorrect Email or Password"
           end
         end
 
@@ -29,17 +29,6 @@ module Sinatra
           warden_handler.logout
           flash[:success] = "Successfully logged out"
           redirect "/"
-        end
-
-        app.post "/unauthenticated" do
-          if session[:return_to].nil?
-            session[:return_to] = env["warden.options"][
-                :attempted_path]
-          end
-          puts env["warden.options"][:attempted_path]
-          flash[:error] = env["warden.options"][:message] ||
-              "Invalid email or password."
-          redirect "login"
         end
       end
     end

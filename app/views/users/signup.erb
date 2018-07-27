@@ -3,20 +3,20 @@
   <form method="POST">
     <div class="form-group">
       <label for="exampleInputEmail1">Email address</label>
-      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" name="user[email]">
+      <input type="email" class="form-control" required id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" name="user[email]">
       <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
     </div>
     <div class="form-group">
       <label for="exampleInputPassword1">Username</label>
-      <input type="text" class="form-control" id="username" placeholder="Username" name="user[username]">
+      <input type="text" class="form-control" id="username" required  placeholder="Username" name="user[username]">
     </div>
     <div class="form-group">
       <label for="exampleInputPassword1">Password</label>
-      <input type="password" class="form-control" id="password" placeholder="Password" name="user[password]">
+      <input type="password" class="form-control" id="password" required  placeholder="Password" name="user[password]">
     </div>
     <div class="form-group">
       <label for="exampleInputPassword1">Confirm Password</label>
-      <input type="password" class="form-control" id="password2" placeholder="Confirm Password" name="user[password_confirmation]">
+      <input type="password" class="form-control"  required id="password2" placeholder="Confirm Password" name="user[password_confirmation]">
     </div>
     <button type="submit" class="authbutton btn btn-primary">Submit</button>
   </form>

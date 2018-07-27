@@ -17,7 +17,6 @@ RSpec.describe Sinatra::App:: TopicController do
                       title: "Enroling twice", description: "The long description on Python"
   end
 
-
   let(:user) { FactoryBot.build :user, topics: [topic] }
 
   let(:admin)  { build :admin }

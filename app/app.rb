@@ -84,7 +84,7 @@ class App < Sinatra::Base
 
     def authenticate!
       user = User.find_by(email: params["email"])
-      if user && user.admin
+      if user && user.authenticate(params["password"]) && user.admin
         success! user
       else
         fail "Invalid email or password"
