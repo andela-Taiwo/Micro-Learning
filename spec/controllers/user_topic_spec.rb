@@ -12,6 +12,12 @@ RSpec.describe Sinatra::App:: TopicController do
                       title: "Testing topic", description: "The long description on ruby"
   end
 
+  let(:topic3) do
+    FactoryBot.create :topic,
+                      title: "Enroling twice", description: "The long description on Python"
+  end
+
+
   let(:user) { FactoryBot.build :user, topics: [topic] }
 
   let(:admin)  { build :admin }
@@ -22,7 +28,7 @@ RSpec.describe Sinatra::App:: TopicController do
                              description: "The long description on ruby"
   end
 
-  before { login_as FactoryBot.create(:user, topics: [topic]) }
+  before { login_as FactoryBot.create(:user, topics: [topic, topic3]) }
 
   context "with valid credentials" do
     it "user views topics" do
@@ -70,13 +76,12 @@ RSpec.describe Sinatra::App:: TopicController do
 
   context "with invalid data set" do
     it "user enrolls twice for a topic " do
-      post "/user/topics/#{topic2.id}"
-      post "/user/topics/#{topic2.id}"
+      post "/user/topics/#{topic3.id}"
       follow_redirect!
       expect(last_response).to be_ok
       expect(last_response.body).
         to include("You have already added the topic.")
-      expect(last_request.url). to include "/topics"
+      expect(last_request.url). to include "/topic/#{topic3.id}"
     end
   end
 end

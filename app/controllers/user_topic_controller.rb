@@ -24,6 +24,13 @@ module Sinatra
 
         app.get "/topic/:id" do
           @topic = Topic.find_by(id: params[:id])
+          @user_topics = current_user.topics
+          @enrolled_status = @user_topics.find_by(id: params[:id]) if @user_topics
+          if @enrolled_status.nil?
+            @button = 'Enroll'
+          else
+            @button = 'Enrolled'
+          end
           if @topic
             erb :'topics/topic_detail'
           else
@@ -38,8 +45,8 @@ module Sinatra
           existing_topic = @user.topics.find_by(id: params[:id])
 
           unless existing_topic.nil?
-            flash[:warning] = "You have already added the topic."
-            redirect "/topics"
+            flash[:halt] = "You have already added the topic."
+            redirect "/topic/#{@topic.id}"
           end
 
           @user_topics = @user.topics << @topic if @topic && @user

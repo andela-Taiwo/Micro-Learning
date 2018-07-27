@@ -13,9 +13,9 @@ module  Sinatra
         end
 
         app.get "/signup" do
-          warden_handler.logout unless current_user.nil?
+          redirect "/" unless current_user.nil?
           @title = "SignUp Form"
-          erb :'users/signup'
+          erb :"users/signup"
         end
 
         app.post "/signup" do

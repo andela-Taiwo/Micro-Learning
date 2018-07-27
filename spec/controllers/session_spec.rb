@@ -29,9 +29,25 @@ RSpec.describe Sinatra::App:: LoginSession do
         to include("Successfully logged in")
     end
 
+    describe "already login user" do
+      before { login_as FactoryBot.create(:admin, username: "admin21") }
+      it "redirect to topic page" do
+        get "/login"
+        follow_redirect!
+        expect(last_response).to be_ok
+        expect(last_request.path).to eq("/topics")
+      end
+
+      it "redirect to home page" do
+        get "/signup"
+        follow_redirect!
+        expect(last_response).to be_ok
+        expect(last_request.path).to eq("/")
+      end
+    end
+
     describe "logout a user " do
       before { login_as FactoryBot.create(:admin, username: "admin21") }
-
       it "logs out user" do
         get "/logout"
         follow_redirect!
