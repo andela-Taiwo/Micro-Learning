@@ -34,7 +34,7 @@ module Sinatra
           if @topic
             erb :'topics/topic_detail'
           else
-            flash[:error] = "Topic not found"
+            flash[:warning] = "Topic not found"
             redirect "/topics"
           end
         end
@@ -45,14 +45,14 @@ module Sinatra
           existing_topic = @user.topics.find_by(id: params[:id])
 
           unless existing_topic.nil?
-            flash[:halt] = "You have already added the topic."
+            flash[:warning] = "You have already added the topic."
             redirect "/topic/#{@topic.id}"
           end
 
           @user_topics = @user.topics << @topic if @topic && @user
           if @user_topics.nil?
             error = @user_topics.errors.messages
-            flash[:error] = error
+            flash[:warning] = error
             redirect "/topic"
           else
             @resources = @topic.resources
@@ -73,7 +73,7 @@ module Sinatra
           if @user_topics.delete(@topic)
             flash[:success] = "Successfully deleted the topic"
           else
-            flash[:halt] = "Unable to delete the topic"
+            flash[:warning] = "Unable to delete the topic"
           end
           redirect "/dashboard"
         end

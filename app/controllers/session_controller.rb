@@ -20,7 +20,7 @@ module Sinatra
           elsif warden_handler.authenticate!
             redirect "/topics", flash[:success] = "Successfully logged in"
           else
-            redirect "/login", flash[:error] = "Incorrect Email or Password"
+            redirect "/login", flash[:warning] = "Incorrect Email or Password"
           end
         end
 

@@ -23,7 +23,7 @@ module Sinatra
             flash[:success] = "Successfully add a new resource"
           else
             error = @resource.errors.messages
-            flash[:error] = error
+            flash[:warning] = error
           end
           redirect "/admin/resource"
         end
@@ -49,7 +49,7 @@ module Sinatra
               flash[:success] = "Successfully updated the resource"
             else
               error = @resource.errors.messages
-              flash[:error] = error
+              flash[:warning] = error
             end
             redirect "/admin/resource"
           end
@@ -61,7 +61,7 @@ module Sinatra
             @resource.destroy
             flash[:success] = "Successfully deleted the resource"
           else
-            flash[:halt] = "Unable to delete the resource"
+            flash[:warning] = "Unable to delete the resource"
           end
           redirect "/admin/resource"
         end

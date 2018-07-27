@@ -20,7 +20,8 @@ module Sinatra
             @topic_resources = @topic.resources unless @topic.nil? || @topic.resources.empty?
             erb :'resources/topic_resources'
           else
-            flash[:error] = "Topic does not exist"
+            flash[:warning
+            ] = "Topic does not exist"
             redirect "/admin/topic"
           end
         end
@@ -34,7 +35,7 @@ module Sinatra
             @topic_resources.destroy(@resource)
             flash[:success] = "Successfully remove the resource."
           else
-            flash[:halt] = "Unable to delete the resource"
+            flash[:warning] = "Unable to delete the resource"
           end
           redirect "/admin/topic/#{id}/resources"
         end
@@ -47,7 +48,7 @@ module Sinatra
           if @resource
             erb :'resources/resource'
           else
-            flash[:halt] = "Resource could not be found."
+            flash[:warning] = "Resource could not be found."
             redirect "/admin/topic/" + id + "/resources"
           end
         end
@@ -60,12 +61,12 @@ module Sinatra
           existing_resources = @topic.resources.find_by(id: resource_ids)
 
           if existing_resources
-            flash[:error] = "The resource #{existing_resources.title} already exist for the topic."
+            flash[:warning] = "The resource #{existing_resources.title} already exist for the topic."
           elsif @topic && resources
             @topic.resources << resources
             flash[:success] = "Resource successfully added to the topic."
           else
-            flash[:error] = "Resource or the topic is not available"
+            flash[:warning] = "Resource or the topic is not available"
           end
           redirect "/admin/topic/" + id + "/resources"
         end

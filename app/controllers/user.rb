@@ -31,7 +31,7 @@ module  Sinatra
             flash[:success] = "Please confirm your email address to continue"
             redirect to "/login"
           else
-            flash[:error] = @user.errors.messages
+            flash[:warning] = @user.errors.messages
             redirect "/signup"
           end
         end

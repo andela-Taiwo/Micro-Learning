@@ -29,7 +29,7 @@ module Sinatra
             flash[:success] = "Successfully updated #{@user.username} role"
             redirect "admin/users"
           else
-            flash[:error] = "User does not exist."
+            flash[:warning] = "User does not exist."
             redirect to "/admin/users"
           end
           erb :'users/users'
@@ -42,7 +42,7 @@ module Sinatra
             users.delete(@user)
             flash[:success] = "Successfully deleted #{@user.username}"
           else
-            flash[:error] = "User does not exist."
+            flash[:warning] = "User does not exist."
           end
           redirect to "/admin/users"
           erb :'users/users'

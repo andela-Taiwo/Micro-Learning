@@ -16,7 +16,7 @@ module Sinatra
             flash[:success] = "Successfully add a new topic"
           else
             error = @topic.errors.messages
-            flash[:error] = error
+            flash[:warning] = error
           end
           redirect "/admin/topic"
         end
@@ -40,7 +40,7 @@ module Sinatra
             if @topic.save
               flash[:success] = "Successfully updated the topic"
             else
-              flash[:error] = @topic.errors.messages
+              flash[:warning] = @topic.errors.messages
             end
             redirect "/admin/topic"
           end
@@ -52,7 +52,7 @@ module Sinatra
             @topic.destroy
             flash[:success] = "Successfully deleted the topic"
           else
-            flash[:halt] = "Unable to delete the topic"
+            flash[:warning] = "Unable to delete the topic"
           end
           redirect "/admin/topic"
         end
