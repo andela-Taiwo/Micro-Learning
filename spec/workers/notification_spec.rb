@@ -20,10 +20,8 @@ RSpec.describe ResourceNotification do
   before do
     FactoryBot.build_stubbed :resource
     FactoryBot.build_stubbed :topic, resources: [resource]
-    ResourceNotification.new
+    login_as FactoryBot.create(:user, topics: [topic])
   end
-
-  before { login_as FactoryBot.create(:user, topics: [topic]) }
 
   context "with valid credentials" do
     before { ResourceNotification.new }

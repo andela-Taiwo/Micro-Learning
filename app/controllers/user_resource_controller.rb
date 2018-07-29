@@ -9,8 +9,8 @@ module Sinatra
       def self.registered(app)
         app.before do
           url = request.path_info
-          check_authentication unless (url == "/login" ||
-              url == "/about") || (url == "/" || url == "/signup")
+          status = (url == "/login" || url == "/about") || (url == "/" || url == "/signup")
+          check_authentication unless status
         end
 
         app.get "/resources" do

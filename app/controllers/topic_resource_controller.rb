@@ -17,7 +17,8 @@ module Sinatra
 
           @title = "Topic Resources"
           if @topic
-            @topic_resources = @topic.resources unless @topic.nil? || @topic.resources.empty?
+            status = @topic.nil? || @topic.resources.empty?
+            @topic_resources = @topic.resources unless status
             erb :'resources/topic_resources'
           else
             flash[:warning
@@ -30,7 +31,8 @@ module Sinatra
           @topic = Topic.find(params[:id])
           id = params[:id]
           @topic_resources = @topic.resources unless @topic.nil?
-          @resource = @topic.resources.find_by(id: params[:resource_id]) unless @topic.resources.nil?
+          parameters = params[:resource_id]
+          @resource = @topic.resources.find_by(id: parameters) unless @topic.resources.nil?
           if @topic_resources && @resource
             @topic_resources.destroy(@resource)
             flash[:success] = "Successfully remove the resource."
@@ -58,10 +60,10 @@ module Sinatra
           resource_ids = params[:topic][:resource_ids] if params.key?("topic")
           resources = Resource.find(resource_ids) unless resource_ids.nil?
           @topic = Topic.find_by(id: params[:id])
-          existing_resources = @topic.resources.find_by(id: resource_ids)
+          exist_resources = @topic.resources.find_by(id: resource_ids)
 
-          if existing_resources
-            flash[:warning] = "The resource #{existing_resources.title} already exist for the topic."
+          if exist_resources
+            flash[:warning] = "The resource #{exist_resources.title} already exist for the topic."
           elsif @topic && resources
             @topic.resources << resources
             flash[:success] = "Resource successfully added to the topic."

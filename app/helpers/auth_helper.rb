@@ -8,7 +8,8 @@ module Sinatra
       end
 
       def check_authentication
-        redirect "/login", flash[:warning] = "Incorrect Email or Password" unless warden_handler.authenticated?
+        message = "Incorrect Email or Password"
+        redirect "/login", flash[:warning] = message unless warden_handler.authenticated?
       end
 
       def check_admin_authentication

@@ -14,7 +14,7 @@ class ResourceNotification
   include Sidekiq::Worker
   uri = URI.parse(ENV["REDISCLOUD_URL"] || "redis://localhost:6379/")
   $redis = Redis.new(host: uri.host, port: uri.port, password: uri.password)
-  def perform(msg = "send resource notification to registered user")
+  def perform(msg: "send resource notification to registered user")
     users = User.all
     puts "Load all users"
     users.each do |user|
@@ -24,7 +24,10 @@ class ResourceNotification
       resources = topic[0].resources
       resource = resources.sample(1)
       username = user.username
-      puts $redis.lpush(msg, activate_email(user.email, resource[0].url, topic[0].title, username)) if resource[0]
+      if resource[0]
+        $redis.lpush(msg, activate_email(user.email,
+                                         resource[0].url, topic[0].title, username))
+      end
     end
   end
 

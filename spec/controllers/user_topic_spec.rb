@@ -25,9 +25,10 @@ RSpec.describe Sinatra::App:: TopicController do
     FactoryBot.build_stubbed :topic,
                              title:       "Testing topic",
                              description: "The long description on ruby"
+    login_as FactoryBot.create(:user, topics: [topic, topic3])
   end
 
-  before { login_as FactoryBot.create(:user, topics: [topic, topic3]) }
+  # before {  }
 
   context "with valid credentials" do
     it "user views topics" do

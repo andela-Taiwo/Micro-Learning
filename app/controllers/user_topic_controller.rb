@@ -7,8 +7,8 @@ module Sinatra
       def self.registered(app)
         app.before do
           url = request.path_info
-          check_authentication unless (url == "/login" ||
-              url == "/about") || (url == "/" || url == "/signup")
+          status = (url == "/login" || url == "/about") || (url == "/" || url == "/signup")
+          check_authentication unless status
         end
 
         app.get "/dashboard" do
@@ -48,8 +48,8 @@ module Sinatra
             flash[:warning] = "You have already added the topic."
             redirect "/topic/#{@topic.id}"
           end
-
-          @user_topics = @user.topics << @topic if @topic && @user
+          status = @topic && @user
+          @user_topics = @user.topics << @topic if status
           if @user_topics.nil?
             error = @user_topics.errors.messages
             flash[:warning] = error
@@ -59,7 +59,8 @@ module Sinatra
             @resources = @resources.sample(1)
             if current_user.email
               message = "Successfully add a new topic to your learning path"
-              MailWorker.perform_at(1.minute, current_user.email, current_user.username, @topic.title)
+              MailWorker.perform_at(1.minute, current_user.email,
+                                    current_user.username, @topic.title)
               flash[:success] = message
               redirect "/dashboard"
             end

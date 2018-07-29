@@ -3,9 +3,9 @@ module Sinatra
     module LoginSession
       def self.registered(app)
         app.before do
-          pass unless request.path_info == "/" ||
-              request.path_info == "/login" ||
-              request.path_info == "/signup"
+          url =  request.path_info
+          status = url == "/" || url == "/login" || url == "/signup"
+          pass unless  status
         end
 
         app.get "/login" do
