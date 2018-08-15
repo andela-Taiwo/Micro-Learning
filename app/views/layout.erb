@@ -1,0 +1,83 @@
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="micro learning app" content="">
+  <meta name="Sokunbi Taiwo" content="">
+  <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="text-centre">
+<div class="container dark-overlay" role="main">
+  <div class="overlay"></div>
+  <header class="masthead mb-auto">
+    <div class="inner">
+
+      <nav class="nav nav-masthead fixed-top my-nav">
+        <h3 class="navbar-brand mr-auto">3L</h3>
+        <a class="nav-link active" href="/">Home</a>
+        <a class="nav-link" href="/about">About us</a>
+        <% if admin_logged_in?  %>
+        <a class="nav-link" href="/admin">Admin Dashboard</a>
+          <a class="nav-link" href="/admin/topic">Topics</a>
+          <a class="nav-link" href="/admin/resource">Resources</a>
+          <a class="nav-link" href="/admin/users">Users</a>
+        <a class="nav-link" href="/logout">Logout</a>
+
+        <% elsif logged_in? %>
+          <a class="nav-link" href="/topics">Topics</a>
+          <a class="nav-link" href="/dashboard">Dashboard</a>
+          <a class="nav-link" href="/logout">Logout</a>
+
+          <% else %>
+          <a class="nav-link" href="/signup">Signup</a>
+          <a class="nav-link" href="login">Login</a>
+
+          <% end %>
+      </nav>
+    </div>
+  </header>
+
+  <% flash.keys.each do |type| %>
+    <% if type %>
+      <div class="alert alert-<%= type %> alert-dismissible fade show" role="alert">
+        <%if flash[type].is_a? Hash %>
+          <%= flash[type].keys[0] %> <%= flash[type].values[0].pop %>
+
+        <% else %>
+          <div data-alert class="flash <%= type %> alert-box radius">
+            <%= flash[type] %>
+          </div>
+        <% end %>
+    <% end %>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+  <%end%>
+
+  <%= yield %>
+</div>
+<footer class="footer fixed-bottom  text-center">
+  <div class="inner text-muted text-centre ">
+    <span>Copyright <strong>@Memunat<%=  Time.new.year%></strong></span>
+  </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script>
+    $('.alert').alert()
+</script>
+</body>
+</html>

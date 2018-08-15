@@ -1,0 +1,15 @@
+<h3><%=@title %></h3>
+<div class="card-group">
+  <%  @resources.each do |resource|%>
+    <div class="card">
+      <!--    <img class="card-img-top" src="..." alt="Card image cap">-->
+      <div class="card-body">
+        <h5 class="card-title"><%= resource.title %></h5>
+        <p class="card-text"> <%= resource.url%></p>
+      </div>
+      <div class="card-footer">
+        <small class="text-muted"><%=resource.updated_at%></small>
+      </div>
+    </div>
+  <% end %>
+</div>
