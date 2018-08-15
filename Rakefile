@@ -1,19 +1,14 @@
-require './app/app'
-require 'sinatra/activerecord/rake'
+require "./app/app"
+require "coveralls/rake/task"
+require "rake"
+require "rspec/core/rake_task"
+require "rubygems"
+require "sinatra/activerecord/rake"
 
-# bundle exec sidekiq
-#
-# task :monitor do
-#   require 'sidekiq/web'
-#   app = Sidekiq::Web
-#   app.set :environment, :production
-#   app.set :bind, '0.0.0.0'
-#   app.set :port, 9494
-#   app.run!
-# end
+desc "Run RSpec"
 
-# Rake::TestTask.new do |task|
-#   task.test_files = FileList['spec/**/*_spec.rb']
-# end
-#
-# task default: :test
+RSpec::Core::RakeTask.new do |t|
+  t.verbose = false
+end
+task default: :spec
+Coveralls::RakeTask.new

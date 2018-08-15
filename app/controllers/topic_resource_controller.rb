@@ -1,47 +1,48 @@
-require 'erb'
-require 'sinatra/flash'
-require 'pony'
-require 'json'
+require "erb"
+require "sinatra/flash"
+require "pony"
+require "json"
 
 module Sinatra
   module App
     module TopicResourceController
-
       def self.registered(app)
-        app.get '/admin/topic/:id/resources' do
-          check_authentication
+        app.before "/admin/*" do
+          check_admin_authentication
+        end
+
+        app.get "/admin/topic/:id/resources" do
           @resources = Resource.all
           @topic = Topic.find_by(id: params[:id])
 
-          @title = 'Topic Resources'
+          @title = "Topic Resources"
           if @topic
-            @topic_resources = @topic.resources unless @topic.nil? || @topic.resources.length == 0
+            status = @topic.nil? || @topic.resources.empty?
+            @topic_resources = @topic.resources unless status
             erb :'resources/topic_resources'
           else
-            flash[:error] = 'Topic does not exist'
-            redirect '/admin/topic'
+            flash[:warning
+            ] = "Topic does not exist"
+            redirect "/admin/topic"
           end
-
         end
 
-        app.delete '/admin/topic/:id/resource/:resource_id/delete' do
-          check_admin_authentication
+        app.delete "/admin/topic/:id/resource/:resource_id" do
           @topic = Topic.find(params[:id])
           id = params[:id]
           @topic_resources = @topic.resources unless @topic.nil?
-          @resource = @topic.resources.find_by(id: params[:resource_id]) unless @topic.resources.nil?
+          parameters = params[:resource_id]
+          @resource = @topic.resources.find_by(id: parameters) unless @topic.resources.nil?
           if @topic_resources && @resource
             @topic_resources.destroy(@resource)
-            flash[:success] = 'Successfully remove the resource.'
-            redirect "/admin/topic/#{id}/resources"
+            flash[:success] = "Successfully remove the resource."
           else
-            flash[:halt] = 'Unable to delete the resource'
-            redirect "/admin/topic/#{id}/resources"
+            flash[:warning] = "Unable to delete the resource"
           end
+          redirect "/admin/topic/#{id}/resources"
         end
 
-        app.get '/admin/topic/:id/resource/:resource_id' do
-          check_admin_authentication
+        app.get "/admin/topic/:id/resource/:resource_id" do
           @topic = Topic.find(params[:id])
           id = params[:id]
           @topic_resources = @topic.resources unless @topic.nil?
@@ -49,32 +50,28 @@ module Sinatra
           if @resource
             erb :'resources/resource'
           else
-            flash[:halt] = 'Resource could not be found.'
-            redirect '/admin/topic/' + id + '/resources'
+            flash[:warning] = "Resource could not be found."
+            redirect "/admin/topic/" + id + "/resources"
           end
         end
 
-        app.post '/admin/topic/:id/resources' do
-          check_admin_authentication
+        app.post "/admin/topic/:id/resources" do
           id = params[:id]
-          resource_ids = params[:topic][:resource_ids]  if params.has_key?('topic')
+          resource_ids = params[:topic][:resource_ids] if params.key?("topic")
           resources = Resource.find(resource_ids) unless resource_ids.nil?
           @topic = Topic.find_by(id: params[:id])
-          existing_resources = @topic.resources.find_by(id: resource_ids)
+          exist_resources = @topic.resources.find_by(id: resource_ids)
 
-          if existing_resources
-            flash[:error] = "The resource #{existing_resources.title}already exist for the topic."
-            redirect '/admin/topic/' + id + '/resources'
+          if exist_resources
+            flash[:warning] = "The resource #{exist_resources.title} already exist for the topic."
           elsif @topic && resources
-            @topic.resources <<  resources
-            flash[:success] = 'Resource successfully added to the topic.'
-            redirect '/admin/topic/' + id + '/resources'
+            @topic.resources << resources
+            flash[:success] = "Resource successfully added to the topic."
           else
-            flash[:error] = 'Resource or the topic is not available'
-            redirect '/admin/topic/' + id + '/resources'
+            flash[:warning] = "Resource or the topic is not available"
           end
+          redirect "/admin/topic/" + id + "/resources"
         end
-
       end
     end
   end

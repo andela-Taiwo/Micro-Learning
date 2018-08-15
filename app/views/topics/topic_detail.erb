@@ -21,7 +21,7 @@
                 <%= @topic.updated_at %>
                 <div class="topic-form">
                   <form method="post" action="/user/topics/<%=@topic.id %>">
-                    <input type="submit" value="Enroll" class="btn btn-outline-primary btn-sm">
+                    <input type="submit" value="<%= @button %>" class="btn btn-outline-primary btn-sm">
                   </form>
                   <form method="get" action="/user/topics/<%=@topic.id %>/resource">
                     <input type="submit" value="Resource" class="btn btn-outline-info btn-sm">

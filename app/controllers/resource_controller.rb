@@ -1,82 +1,70 @@
-require 'erb'
-require 'sinatra/flash'
-require 'pony'
-require 'json'
+require "erb"
+require "sinatra/flash"
+require "pony"
+require "json"
 
 module Sinatra
   module App
-    module ResourceController
-
+    module AdminResourceController
+      # @param [Object] app
       def self.registered(app)
-
-        app.get '/resources' do
-          check_authentication
-          @resources = Resource.order('created_at DESC')
-          erb  :'resources/resources'
+        app.before "/admin/*" do
+          check_admin_authentication
         end
 
-        app.post '/admin/resource' do
-          check_admin_authentication
+        app.get "/resources" do
+          @resources = Resource.order("created_at DESC")
+          erb :'resources/resources'
+        end
+
+        app.post "/admin/resource" do
           @resource = Resource.new(params[:resource])
           if @resource.save
-            flash[:success] = 'Successfully add a new resource'
-            redirect '/admin/resource'
+            flash[:success] = "Successfully add a new resource"
           else
-            @errors = @resource.errors.to_json
-            error = JSON.parse(@errors)
-            flash[:error] = error
-            redirect '/admin/resource'
-            end
+            error = @resource.errors.messages
+            flash[:warning] = error
+          end
+          redirect "/admin/resource"
         end
 
-        app.get '/admin/resource' do
-          check_admin_authentication
-            @resources = Resource.order('updated_at DESC')
-            @title = 'Resources'
-            erb :'resources/resource_form'
+        app.get "/admin/resource" do
+          @resources = Resource.order("updated_at DESC")
+          @title = "Resources"
+          erb :'resources/resource_form'
         end
 
-        app.get '/admin/resource/:id' do
-        check_admin_authentication
-        @resource = Resource.find_by_id(params[:id])
-        if @resource
-          erb :'resources/edit_resource_form'
+        app.get "/admin/resource/:id" do
+          @resource = Resource.find_by(id: params[:id])
+          erb :'resources/edit_resource_form' if @resource
         end
-        end
-        app.patch '/admin/resource/:id/edit' do
-          check_admin_authentication
-          @resource = Resource.find_by_id(params[:id])
+
+        app.patch "/admin/resource/:id" do
+          @resource = Resource.find_by(id: params[:id])
           if @resource
             erb :'resources/edit_resource_form'
-
-            @resource.title = params[:title] if params.has_key?('title')
-            @resource.description = params[:description] if params.has_key?('description')
-            @resource.url = params[:url] if params.has_key?('url')
-
+            data = clean_data(params)
+            @resource.update(data)
             if @resource.save
-              flash[:success] = 'Successfully updated the resource'
-              redirect '/admin/resource'
+              flash[:success] = "Successfully updated the resource"
             else
-              flash[:error] = 'Unable to update the resource'
+              error = @resource.errors.messages
+              flash[:warning] = error
             end
+            redirect "/admin/resource"
           end
-
         end
 
-        app.delete '/admin/resource/:id/delete' do
-          check_admin_authentication
-          @resource = Resource.find_by_id(params[:id])
+        app.delete "/admin/resource/:id" do
+          @resource = Resource.find_by(id: params[:id])
           if @resource
             @resource.destroy
-            flash[:success] = 'Successfully deleted the resource'
-            redirect '/admin/resource'
+            flash[:success] = "Successfully deleted the resource"
           else
-            flash[:halt] = 'Unable to delete the resource'
-            redirect '/admin/resource'
+            flash[:warning] = "Unable to delete the resource"
           end
-
+          redirect "/admin/resource"
         end
-
       end
     end
   end

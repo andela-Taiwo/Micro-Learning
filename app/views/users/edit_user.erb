@@ -1,5 +1,5 @@
 <% if @user %>
-  <form method="post" action="/admin/user/<%=@user.id %>/role" class="sm">
+  <form method="post" action="/admin/user/<%=@user.id %>" class="sm">
     <div class="form-group sm">
       <label for="exampleFormControlInput1">Admin</label>
       <input type="text" class="form-control" id="admin_status" placeholder="admin status" name="admin" value="<%= @user.admin %>">

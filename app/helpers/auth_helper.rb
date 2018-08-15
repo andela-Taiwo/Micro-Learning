@@ -1,31 +1,25 @@
-
 module Sinatra
   module App
     module Helpers
-
       private
 
       def warden_handler
-        request.env['warden']
+        request.env["warden"]
       end
 
       def check_authentication
-        unless warden_handler.authenticated?
-          redirect '/login'
-        end
-
+        message = "Incorrect Email or Password"
+        redirect "/login", flash[:warning] = message unless warden_handler.authenticated?
       end
 
       def check_admin_authentication
         check_authentication
-        unless current_user.admin
-          redirect '/login'
-        end
+        redirect "/login" unless admin_logged_in?
       end
 
       def current_user
         @current_user = warden_handler.user
-        @current_user ||= User.find_by_id(session[:user_id])
+        @current_user ||= User.find_by(id: session[:user_id])
       end
 
       def logged_in?
@@ -33,9 +27,8 @@ module Sinatra
       end
 
       def admin_logged_in?
-        true if logged_in? && current_user.admin == true
+        logged_in? && current_user.admin
       end
-
     end
   end
 end

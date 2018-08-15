@@ -1,0 +1,10 @@
+
+<div class="card table" style="padding: 10px 15px; ">
+  <p>Processed: <%= @stats.processed %></p>
+  <p>In Progress:<%= @workers.size%> </p>
+  <p>Enqueued:<%= @stats.enqueued%></p>
+  <p><a href='/test'>Refresh</a></p>
+  <p><a href='/test/add_job'>Add Job</a></p>
+  <p><a href='/sidekiq'>Dashboard</a></p>
+</div>
+

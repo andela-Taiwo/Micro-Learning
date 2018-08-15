@@ -1,6 +1,6 @@
 <div class="container card authform">
   <% if @topic %>
-    <form method="post" action="/admin/topic/<%=@topic.id %>/edit" class="sm">
+    <form method="post" action="/admin/topic/<%=@topic.id %>" class="sm">
       <div class="form-group sm">
         <label for="exampleFormControlInput1">Title</label>
         <input type="text" class="form-control" id="topicTitle" placeholder="Title" name="title" value="<%= @topic.title %>">
